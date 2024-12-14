@@ -18,6 +18,6 @@ public class Players {
     private Position position;
     private int number;
     @ManyToOne
-    @JoinColumn(name = "teams_id")
+    @JoinColumn(name = "team_id")
     private Teams teams;
 }

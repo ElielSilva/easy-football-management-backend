@@ -23,7 +23,6 @@ public class ChampionsShips {
     private Date createdAt;
     private float award;
     private int quantity;
-    @ManyToOne
-    @JoinColumn(name = "users_id")
+    @OneToOne
     private Users users;
 }
