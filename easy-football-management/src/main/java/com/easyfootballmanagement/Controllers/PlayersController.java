@@ -28,7 +28,7 @@ public class PlayersController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id")
     public ResponseEntity<Players> GetById(@RequestParam long id){
         Players result = null;
         try {

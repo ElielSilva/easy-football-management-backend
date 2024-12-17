@@ -1,8 +1,6 @@
 package com.easyfootballmanagement.Controllers;
 
-import com.easyfootballmanagement.Dtos.TeamsDtoRequest;
 import com.easyfootballmanagement.Exception.BusinessException;
-import com.easyfootballmanagement.Mapper.TeamsToMap;
 import com.easyfootballmanagement.Models.Teams;
 import com.easyfootballmanagement.Services.TeamsService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,6 +29,19 @@ public class TeamsController {
     }
 
     @GetMapping("/{id}")
+    public String getQuantityPlayer(@PathVariable Long id) {
+        try {
+            Teams team = service.getById(id);
+
+            // exemplo lazy
+            int qnt = team.getPlayers().size();
+            return "O time: " + team.getName() + " tem " + qnt + " jogadores.";
+        } catch (BusinessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("/id")
     public ResponseEntity<Teams> GetById(@RequestParam long id){
         Teams result = null;
         try {

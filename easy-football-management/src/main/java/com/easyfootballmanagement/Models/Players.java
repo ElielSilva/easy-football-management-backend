@@ -20,7 +20,4 @@ public class Players {
     @Enumerated(EnumType.STRING)
     private Position position;
     private int number;
-    @ManyToOne
-    @JoinColumn(name = "team_id")
-    private Teams teams;
 }

@@ -28,7 +28,7 @@ public class ChampionsShipsController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id")
     public ResponseEntity<ChampionsShips> GetById(@RequestParam long id){
         ChampionsShips result = null;
         try {

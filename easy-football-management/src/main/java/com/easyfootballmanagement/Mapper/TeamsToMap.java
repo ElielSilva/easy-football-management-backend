@@ -1,11 +1,9 @@
 package com.easyfootballmanagement.Mapper;
 
 import com.easyfootballmanagement.Dtos.TeamsDtoRequest;
-import com.easyfootballmanagement.Dtos.TeamsFullDtoRequest;
 import com.easyfootballmanagement.Models.Players;
 import com.easyfootballmanagement.Models.Teams;
 import com.easyfootballmanagement.Models.Users;
-import org.apache.catalina.User;
 
 import java.util.List;
 
@@ -26,7 +24,4 @@ public class TeamsToMap {
         return  t.builder().users(users).build();
     }
 
-    public static Teams mapToFullDto(TeamsFullDtoRequest dto) {
-        return Teams.builder().users(UserToMap.mapToDtoForUser(dto.users)).players().build();
-    }
 }

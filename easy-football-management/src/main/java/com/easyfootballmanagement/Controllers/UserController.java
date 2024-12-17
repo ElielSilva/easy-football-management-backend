@@ -31,7 +31,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id")
     public ResponseEntity<Users> getById(@RequestParam long id){
         Users result = null;
         try {

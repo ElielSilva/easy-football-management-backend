@@ -15,11 +15,11 @@ public class Results {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "home_id")
     private ChampionsShipsHasTeams home;
     private int qntGolsHome;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "outside_id")
     private ChampionsShipsHasTeams outside;
     private int qntGolsOutside;
