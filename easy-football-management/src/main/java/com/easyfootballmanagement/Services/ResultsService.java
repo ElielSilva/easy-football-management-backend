@@ -1,8 +1,8 @@
 package com.easyfootballmanagement.Services;
 
-import com.easyfootballmanagement.Exception.BusinessException;
-import com.easyfootballmanagement.Models.Results;
-import com.easyfootballmanagement.Repository.ResultsRepository;
+import com.easyfootballmanagement.application.common.exception.BusinessException;
+import com.easyfootballmanagement.domain.entities.Results;
+import com.easyfootballmanagement.infrastructure.repository.ResultsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

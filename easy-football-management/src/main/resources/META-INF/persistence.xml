@@ -3,7 +3,7 @@
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd"
              version="3.1">
     <persistence-unit name="my-persistence-unit" transaction-type="RESOURCE_LOCAL">
-        <class>com.easyfootballmanagement.Models.Users</class>
+        <class>com.easyfootballmanagement.domain.entities.Users</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>

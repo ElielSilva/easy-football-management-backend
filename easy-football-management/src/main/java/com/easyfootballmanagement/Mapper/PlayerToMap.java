@@ -1,7 +1,7 @@
 package com.easyfootballmanagement.Mapper;
 
 import com.easyfootballmanagement.Dtos.PlayerDtoRequest;
-import com.easyfootballmanagement.Models.Players;
+import com.easyfootballmanagement.domain.entities.Players;
 
 import java.util.ArrayList;
 import java.util.List;

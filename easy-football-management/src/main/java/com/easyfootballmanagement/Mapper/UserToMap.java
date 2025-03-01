@@ -1,7 +1,7 @@
 package com.easyfootballmanagement.Mapper;
 
 import com.easyfootballmanagement.Dtos.UserDtoRequest;
-import com.easyfootballmanagement.Models.Users;
+import com.easyfootballmanagement.domain.entities.Users;
 
 public class UserToMap {
 

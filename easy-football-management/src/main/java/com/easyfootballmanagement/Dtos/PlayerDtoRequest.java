@@ -1,7 +1,6 @@
 package com.easyfootballmanagement.Dtos;
 
-import com.easyfootballmanagement.Models.Position;
-import com.easyfootballmanagement.Models.Teams;
+import com.easyfootballmanagement.domain.enums.Position;
 
 public class PlayerDtoRequest {
     public String fullName;

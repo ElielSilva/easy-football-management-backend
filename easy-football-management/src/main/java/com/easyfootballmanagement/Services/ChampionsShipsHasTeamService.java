@@ -1,8 +1,8 @@
 package com.easyfootballmanagement.Services;
 
-import com.easyfootballmanagement.Exception.BusinessException;
-import com.easyfootballmanagement.Models.ChampionsShipsHasTeams;
-import com.easyfootballmanagement.Repository.ChampionsShipsHasTeamsRepository;
+import com.easyfootballmanagement.application.common.exception.BusinessException;
+import com.easyfootballmanagement.domain.entities.ChampionsShipsHasTeams;
+import com.easyfootballmanagement.infrastructure.repository.ChampionsShipsHasTeamsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

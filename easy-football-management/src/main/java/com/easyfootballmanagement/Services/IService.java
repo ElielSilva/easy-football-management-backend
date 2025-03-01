@@ -1,7 +1,6 @@
 package com.easyfootballmanagement.Services;
 
-import com.easyfootballmanagement.Exception.BusinessException;
-import com.easyfootballmanagement.Models.Users;
+import com.easyfootballmanagement.application.common.exception.BusinessException;
 
 import java.util.List;
 
