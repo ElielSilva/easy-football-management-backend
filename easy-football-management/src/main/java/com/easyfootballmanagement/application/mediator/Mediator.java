@@ -3,7 +3,9 @@ package com.easyfootballmanagement.application.mediator;
 import com.easyfootballmanagement.application.common.interfaces.IRequest;
 import com.easyfootballmanagement.application.common.interfaces.IRequestHandler;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Mediator implements IMediator {
     private final ApplicationContext context;
 

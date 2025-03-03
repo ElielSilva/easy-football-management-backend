@@ -1,12 +1,8 @@
 package com.easyfootballmanagement.features.users;
 
-import com.easyfootballmanagement.Dtos.UserDtoRequest;
-import com.easyfootballmanagement.application.common.exception.BusinessException;
-import com.easyfootballmanagement.Mapper.UserToMap;
+import com.easyfootballmanagement.application.mediator.Mediator;
 import com.easyfootballmanagement.domain.entities.Users;
-import com.easyfootballmanagement.Services.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,57 +15,24 @@ import java.util.List;
 @Tag(name = "User", description = "Endpoints responsavel para o gerenciamento dos usuarios")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final Mediator mediator;
+
+    public UserController(Mediator mediator) {
+        this.mediator = mediator;
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<Users> createUser(@RequestBody CreateUserCommand createUserCommand) {
+        return new ResponseEntity<>(mediator.send(createUserCommand), HttpStatus.CREATED);
+    }
 
     @GetMapping("/")
-    public ResponseEntity<List<Users>> get(){
-        var result = userService.get();
-        System.out.println(result);
-        if (result != null)
-            return new ResponseEntity<List<Users>>(result, HttpStatus.OK);
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<List<Users>> getUsers() {
+        return new ResponseEntity<>(mediator.send(new GetAllUserQuery()), HttpStatus.OK);
     }
 
-    @GetMapping("/id")
-    public ResponseEntity<Users> getById(@RequestParam long id){
-        Users result = null;
-        try {
-            result = userService.getById(id);
-            return new ResponseEntity<Users>(result, HttpStatus.OK);
-        } catch (BusinessException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    @GetMapping("/{id}")
+    public ResponseEntity<List<Users>> getUsersById(@PathVariable Long id) {
+        return new ResponseEntity<>(mediator.send(new GetAllUserQuery()), HttpStatus.OK);
     }
-
-    @PostMapping
-    public ResponseEntity insertUser(@RequestBody UserDtoRequest model) {
-        try {
-            userService.insert(UserToMap.mapToDtoForUser(model));
-            return new ResponseEntity(HttpStatus.CREATED);
-        } catch (BusinessException e) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @DeleteMapping
-    public ResponseEntity deleteById(@RequestParam long id) {
-        try {
-            userService.delete(id);
-            return new ResponseEntity(HttpStatus.OK);
-        } catch (BusinessException e) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @PutMapping
-    public ResponseEntity UpdateUser(@RequestBody Users model) {
-        try {
-            userService.update(model);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (BusinessException e) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
-    }
-
 }
