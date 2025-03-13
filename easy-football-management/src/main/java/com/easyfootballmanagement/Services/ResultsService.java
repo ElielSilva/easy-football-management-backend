@@ -40,7 +40,6 @@ public class ResultsService implements IService<Results> {
 
     @Override
     public void update(Results model) throws BusinessException {
-        repository.deleteById(model.getId());
-        repository.save(model);
+        System.out.println("ok");
     }
 }

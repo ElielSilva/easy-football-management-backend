@@ -4,6 +4,8 @@ package com.easyfootballmanagement.features.users;
 import com.easyfootballmanagement.application.common.interfaces.IRequestHandler;
 import com.easyfootballmanagement.domain.entities.Users;
 import com.easyfootballmanagement.infrastructure.repository.UserRepository;
+import lombok.SneakyThrows;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,12 +15,18 @@ public class GetAllUserQueryHandler implements IRequestHandler<GetAllUserQuery, 
 
     private final UserRepository repository;
 
+
     public GetAllUserQueryHandler(UserRepository repository) {
         this.repository = repository;
     }
 
+    @SneakyThrows
     @Override
     public List<Users> handle(GetAllUserQuery request) {
-        return repository.findAll();
+        var result = repository.findAll();
+        if (result.isEmpty()) {
+            throw new ChangeSetPersister.NotFoundException();
+        }
+        return result;
     }
 }

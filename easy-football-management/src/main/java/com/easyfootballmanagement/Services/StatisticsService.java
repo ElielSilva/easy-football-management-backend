@@ -40,7 +40,6 @@ public class StatisticsService implements IService<Statistics> {
 
     @Override
     public void update(Statistics model) throws BusinessException {
-        repository.deleteById(model.getId());
-        repository.save(model);
+        System.out.println("ok");
     }
 }

@@ -32,10 +32,9 @@ public class TeamsController {
     public String getQuantityPlayer(@PathVariable Long id) {
         try {
             Teams team = service.getById(id);
-
-            // exemplo lazy
             int qnt = team.getPlayers().size();
-            return "O time: " + team.getName() + " tem " + qnt + " jogadores.";
+            String s = "O time: " + team.getName() + " tem " + qnt + " jogadores.";
+            return s;
         } catch (BusinessException e) {
             throw new RuntimeException(e);
         }

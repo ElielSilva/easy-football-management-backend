@@ -40,7 +40,6 @@ public class PlayerService implements IService<Players> {
 
     @Override
     public void update(Players model) throws BusinessException {
-        repository.deleteById(model.getId());
-        repository.save(model);
+        System.out.println("ok");
     }
 }

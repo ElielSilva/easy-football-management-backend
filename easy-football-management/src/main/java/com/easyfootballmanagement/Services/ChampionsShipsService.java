@@ -40,7 +40,6 @@ public class ChampionsShipsService implements IService<ChampionsShips> {
 
     @Override
     public void update(ChampionsShips model) throws BusinessException {
-        repository.deleteById(model.getId());
-        repository.save(model);
+        System.out.println("ok");
     }
 }

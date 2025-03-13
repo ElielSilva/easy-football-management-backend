@@ -1,5 +1,7 @@
 package com.easyfootballmanagement.application.common.exception;
 
+import org.springframework.validation.BindException;
+
 public class BusinessException extends Exception {
     public BusinessException() {
     }

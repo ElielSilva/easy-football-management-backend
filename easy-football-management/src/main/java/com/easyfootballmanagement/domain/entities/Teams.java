@@ -20,9 +20,6 @@ public class Teams {
     private String name;
     @Column(name = "url_image")
     private String urlImg;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "users_id")
-    private Users users;
     @OneToMany(fetch = FetchType.LAZY)
     private List<Players> players;
 }

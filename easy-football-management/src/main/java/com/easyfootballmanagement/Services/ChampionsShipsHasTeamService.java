@@ -22,7 +22,7 @@ public class ChampionsShipsHasTeamService implements IService<ChampionsShipsHasT
     @Override
     public ChampionsShipsHasTeams getById(long id) throws BusinessException {
         var result = repository.findById(id);
-        if (!result.isPresent()){
+        if (result.isEmpty()) {
             throw new BusinessException("Entidade não esta inserida em nossa base");
         }
         return result.get();
@@ -40,7 +40,6 @@ public class ChampionsShipsHasTeamService implements IService<ChampionsShipsHasT
 
     @Override
     public void update(ChampionsShipsHasTeams model) throws BusinessException {
-        repository.deleteById(model.getId());
-        repository.save(model);
+        System.out.println("ok");
     }
 }

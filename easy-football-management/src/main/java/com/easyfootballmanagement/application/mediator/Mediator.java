@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Mediator implements IMediator {
+
     private final ApplicationContext context;
 
     public Mediator(ApplicationContext context) {

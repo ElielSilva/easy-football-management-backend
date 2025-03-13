@@ -40,7 +40,6 @@ public class TeamsService implements IService<Teams> {
 
     @Override
     public void update(Teams model) throws BusinessException {
-        repository.deleteById(model.getId());
-        repository.save(model);
+        System.out.println("ok");
     }
 }
