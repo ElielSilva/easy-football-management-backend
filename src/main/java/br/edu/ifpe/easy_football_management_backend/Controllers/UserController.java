@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
@@ -23,29 +23,34 @@ public class UserController {
     }
 
 
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User savedUser = userService.saveUser(user);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
-    }
-
+//    @PostMapping
+//    public ResponseEntity<User> createUser(@RequestBody User user) {
+//        User savedUser = userService.saveUser(user);
+//        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+//    }
+//
+//
+//    @GetMapping
+//    public List<User> getAllUsers() {
+//        return userService.getAllUsers();
+//    }
+//
+//
+//    @GetMapping("/{userId}")
+//    public ResponseEntity<User> getUserById(@PathVariable UUID userId) {
+//        Optional<User> user = userService.getUserById(userId);
+//        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+//    }
 
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<String> getUser() {
+        return ResponseEntity.ok("sucesso");
     }
 
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable UUID userId) {
-        Optional<User> user = userService.getUserById(userId);
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable UUID userId) {
-        userService.deleteUser(userId);
-        return ResponseEntity.noContent().build();
-    }
+//    @DeleteMapping("/{userId}")
+//    public ResponseEntity<Void> deleteUser(@PathVariable UUID userId) {
+//        userService.deleteUser(userId);
+//        return ResponseEntity.noContent().build();
+//    }
 }
