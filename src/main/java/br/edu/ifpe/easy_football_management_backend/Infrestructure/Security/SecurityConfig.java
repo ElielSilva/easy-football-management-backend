@@ -1,4 +1,4 @@
-package br.edu.ifpe.easy_football_management_backend.Services;
+package br.edu.ifpe.easy_football_management_backend.Infrestructure.Security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

@@ -1,15 +1,13 @@
-package br.edu.ifpe.easy_football_management_backend.Entity;
+package br.edu.ifpe.easy_football_management_backend.Domain.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
 @Entity
 @Table(name = "users")
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor

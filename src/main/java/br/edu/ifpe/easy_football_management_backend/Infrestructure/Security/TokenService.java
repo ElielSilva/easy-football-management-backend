@@ -1,6 +1,6 @@
-package br.edu.ifpe.easy_football_management_backend.Services;
+package br.edu.ifpe.easy_football_management_backend.Infrestructure.Security;
 
-import br.edu.ifpe.easy_football_management_backend.Entity.User;
+import br.edu.ifpe.easy_football_management_backend.Domain.Entity.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 
 @Service

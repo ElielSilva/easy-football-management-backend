@@ -1,7 +1,7 @@
-package br.edu.ifpe.easy_football_management_backend.Services;
+package br.edu.ifpe.easy_football_management_backend.Infrestructure.Security;
 
-import br.edu.ifpe.easy_football_management_backend.Entity.User;
-import br.edu.ifpe.easy_football_management_backend.Repository.UserRepository;
+import br.edu.ifpe.easy_football_management_backend.Domain.Entity.User;
+import br.edu.ifpe.easy_football_management_backend.Infrestructure.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,8 +1,8 @@
-package br.edu.ifpe.easy_football_management_backend.Controllers;
+package br.edu.ifpe.easy_football_management_backend.Presentation;
 
-import br.edu.ifpe.easy_football_management_backend.Entity.User;
-import br.edu.ifpe.easy_football_management_backend.Repository.UserRepository;
-import br.edu.ifpe.easy_football_management_backend.Services.TokenService;
+import br.edu.ifpe.easy_football_management_backend.Domain.Entity.User;
+import br.edu.ifpe.easy_football_management_backend.Infrestructure.Repository.UserRepository;
+import br.edu.ifpe.easy_football_management_backend.Infrestructure.Security.TokenService;
 import br.edu.ifpe.easy_football_management_backend.dto.LoginResquetDTO;
 import br.edu.ifpe.easy_football_management_backend.dto.RegisterRequestDTO;
 import br.edu.ifpe.easy_football_management_backend.dto.ResponseDTO;
