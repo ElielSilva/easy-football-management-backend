@@ -13,7 +13,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
@@ -22,16 +22,10 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "email")
-    private String email;
+    @Column(name = "position")
+    private String position;
 
-    @Column(name = "password")
-    private String password;
-
-    @Column(name = "deleted")
-    private Boolean deleted;
-
-    @OneToOne(mappedBy = "User", cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private Team team;
+    @ManyToOne
+    @JoinColumn(name = "timeId", nullable = false)
+    private Team time;
 }

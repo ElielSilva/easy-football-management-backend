@@ -1,9 +1,13 @@
 package br.edu.ifpe.easy_football_management_backend.Presentation;
 
+import br.edu.ifpe.easy_football_management_backend.Domain.Entity.User;
 import br.edu.ifpe.easy_football_management_backend.Infrestructure.Security.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -16,25 +20,11 @@ public class UserController {
         this.userService = userService;
     }
 
-
-//    @PostMapping
-//    public ResponseEntity<User> createUser(@RequestBody User user) {
-//        User savedUser = userService.saveUser(user);
-//        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
-//    }
-//
-//
-//    @GetMapping
-//    public List<User> getAllUsers() {
-//        return userService.getAllUsers();
-//    }
-//
-//
-//    @GetMapping("/{userId}")
-//    public ResponseEntity<User> getUserById(@PathVariable UUID userId) {
-//        Optional<User> user = userService.getUserById(userId);
-//        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-//    }
+    @GetMapping("/{userId}")
+    public ResponseEntity<User> getUserById(@PathVariable UUID userId) {
+        Optional<User> user = userService.getUserById(userId);
+        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
     @GetMapping
     public ResponseEntity<String> getUser() {

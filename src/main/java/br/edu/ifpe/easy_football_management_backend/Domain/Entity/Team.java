@@ -3,6 +3,7 @@ package br.edu.ifpe.easy_football_management_backend.Domain.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -13,7 +14,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
@@ -22,16 +23,10 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "email")
-    private String email;
+    @OneToOne
+    @JoinColumn(name = "userId", referencedColumnName = "id")
+    private User user;
 
-    @Column(name = "password")
-    private String password;
-
-    @Column(name = "deleted")
-    private Boolean deleted;
-
-    @OneToOne(mappedBy = "User", cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private Team team;
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Player> Players;
 }
