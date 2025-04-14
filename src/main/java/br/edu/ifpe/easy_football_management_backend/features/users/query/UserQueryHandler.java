@@ -11,8 +11,8 @@ import java.util.Optional;
 @Component
 public class UserQueryHandler {
 
-    private final UserRepository userRepository;
-    private final TokenService tokenService;
+    public final UserRepository userRepository;
+    public final TokenService tokenService;
 
     public UserQueryHandler(UserRepository userRepository, TokenService tokenService) {
         this.userRepository = userRepository;

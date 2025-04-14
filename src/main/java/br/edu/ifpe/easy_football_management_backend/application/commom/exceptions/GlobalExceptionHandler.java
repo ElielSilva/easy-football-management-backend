@@ -29,4 +29,19 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, String>> handleGenericException(Exception ex) {
+        Map<String, String> error = new HashMap<>();
+//        error.put("error", "Ocorreu um erro interno.");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
+
+//    @ExceptionHandler(javax.persistence.EntityNotFoundException.class)
+//    public ResponseEntity<Map<String, String>> handleEntityNotFound(javax.persistence.EntityNotFoundException ex) {
+//        Map<String, String> error = new HashMap<>();
+//        error.put("error", "Recurso não encontrado.");
+//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+//    }
+
 }

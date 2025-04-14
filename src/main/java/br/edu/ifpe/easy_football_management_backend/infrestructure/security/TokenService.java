@@ -23,6 +23,7 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("api-local")
                     .withSubject(user.getEmail())
+//                    .withClaim("id", user.getId())
                     .withExpiresAt(generateExpirationDate())
                     .sign(algorithm);
         }catch (JWTCreationException exception){
@@ -53,5 +54,13 @@ public class TokenService {
 
     private Instant generateExpirationDate(){
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
-    };
+    }
+
+    public String extractUserId(String token) {
+        try {
+            return JWT.decode(token).getClaim("id").toString();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao extrair ID do token.");
+        }
+    }
 }

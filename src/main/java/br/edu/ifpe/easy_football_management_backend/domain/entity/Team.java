@@ -26,7 +26,7 @@ public class Team {
     @Column(name = "url_image")
     private String urlImage;
 
-//    @ManyToOne
-//    @JoinColumn(name = "users_id", nullable = false)
-//    private User user;
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }
