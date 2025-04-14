@@ -12,7 +12,7 @@ public class CorsConfigurations implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:5173")
+                .allowedOrigins("http://localhost:4200, http://localhost:5173")
                 .allowedMethods(
                         HttpMethod.GET.name(),
                         HttpMethod.POST.name(),
@@ -22,7 +22,15 @@ public class CorsConfigurations implements WebMvcConfigurer {
                         HttpMethod.TRACE.name(),
                         HttpMethod.HEAD.name()
                 ).allowedHeaders(HttpHeaders.CONTENT_TYPE,
-                       HttpHeaders.AUTHORIZATION)
-               .allowCredentials(true);
+                        HttpHeaders.ACCEPT,
+                        HttpHeaders.ACCEPT_LANGUAGE,
+                        HttpHeaders.ACCEPT_ENCODING,
+                        HttpHeaders.ACCEPT,
+                        HttpHeaders.AGE,
+                        HttpHeaders.ALLOW,
+                        HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS,
+                        HttpHeaders.ACCEPT_RANGES,
+                        HttpHeaders.AUTHORIZATION)
+                .allowCredentials(true);
     }
 }

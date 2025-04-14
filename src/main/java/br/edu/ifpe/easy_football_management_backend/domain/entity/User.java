@@ -1,8 +1,10 @@
 package br.edu.ifpe.easy_football_management_backend.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -36,6 +38,7 @@ public class User {
     @Column(name = "deleted")
     private Boolean deleted;
 
-//    @OneToMany(mappedBy = "user")
-//    private List<Team> teams;
+    @OneToMany(mappedBy = "user")
+    @JsonBackReference
+    private List<Team> teams;
 }

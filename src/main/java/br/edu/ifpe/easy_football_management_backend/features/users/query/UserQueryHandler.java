@@ -27,7 +27,7 @@ public class UserQueryHandler {
     public Optional<User> findUserByEmail(String authHeader) {
         String token = authHeader.substring(7);
 
-        String email = tokenService.extractEmail(token);
+        String email = tokenService.extractID(token);
         Optional<User> users = userRepository.findByEmail(email);
         return users;
     }

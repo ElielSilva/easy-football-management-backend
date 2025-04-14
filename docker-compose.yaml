@@ -4,6 +4,8 @@ services:
   mysql:
     container_name: 'guide-mysql'
     image: 'mysql:latest'
+    networks:
+      - my-networks
     environment:
       - 'MYSQL_DATABASE=mydb'
       - 'MYSQL_PASSWORD=secret'
@@ -11,3 +13,6 @@ services:
       - 'MYSQL_USER=myuser'
     ports:
       - '3306:3306'
+networks:
+  my-networks:
+    driver: bridge
