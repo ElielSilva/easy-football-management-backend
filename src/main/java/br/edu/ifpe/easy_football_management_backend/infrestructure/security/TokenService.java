@@ -9,6 +9,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.Console;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -22,8 +23,7 @@ public class TokenService {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("api-local")
-                    .withSubject(user.getEmail())
-//                    .withClaim("id", user.getId())
+                    .withSubject(user.getId().toString())
                     .withExpiresAt(generateExpirationDate())
                     .sign(algorithm);
         }catch (JWTCreationException exception){
@@ -44,23 +44,25 @@ public class TokenService {
         }
     }
 
-    public String extractEmail(String token) {
+    public String extractID(String token) {
         try {
             return JWT.decode(token).getSubject();
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao extrair email do token.");
+            throw new RuntimeException("Erro ao extrair UUID do token.");
+        }
+    }
+
+    public static String extract(String token) {
+        try {
+            token = token.replaceFirst("Bearer", "");
+            token = token.trim();
+            return JWT.decode(token).getSubject();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao extrair UUID do token.");
         }
     }
 
     private Instant generateExpirationDate(){
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
-    }
-
-    public String extractUserId(String token) {
-        try {
-            return JWT.decode(token).getClaim("id").toString();
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao extrair ID do token.");
-        }
-    }
+    };
 }

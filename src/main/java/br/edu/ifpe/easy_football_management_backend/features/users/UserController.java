@@ -3,6 +3,7 @@ package br.edu.ifpe.easy_football_management_backend.features.users;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.User;
 import br.edu.ifpe.easy_football_management_backend.features.users.command.UserCommandHandler;
 import br.edu.ifpe.easy_football_management_backend.features.users.query.UserQueryHandler;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
+@SecurityRequirement(name = "bearerAuth")
 public class UserController {
     private final UserCommandHandler userCommandHandler;
     private final UserQueryHandler userQueryHandler;

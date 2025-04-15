@@ -3,8 +3,8 @@ package br.edu.ifpe.easy_football_management_backend.features.auth.command;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.Team;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.TeamRepository;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.User;
+import br.edu.ifpe.easy_football_management_backend.domain.entity.UserRepository;
 import br.edu.ifpe.easy_football_management_backend.features.auth.RegisterUserCommand;
-import br.edu.ifpe.easy_football_management_backend.features.auth.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 

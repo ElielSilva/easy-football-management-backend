@@ -1,6 +1,8 @@
 package br.edu.ifpe.easy_football_management_backend.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,9 +26,14 @@ public class Team {
     private String name;
 
     @Column(name = "url_image")
+    @Size(max = 500)
     private String urlImage;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @Column(name = "deleted")
+    private Boolean deleted;
+
+    @ManyToOne
+    @JoinColumn(name = "users_id")
+    @JsonBackReference
     private User user;
 }

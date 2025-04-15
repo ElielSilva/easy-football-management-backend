@@ -1,8 +1,8 @@
 package br.edu.ifpe.easy_football_management_backend.features.auth.query;
 
+import br.edu.ifpe.easy_football_management_backend.domain.entity.UserRepository;
 import br.edu.ifpe.easy_football_management_backend.infrestructure.security.TokenService;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.User;
-import br.edu.ifpe.easy_football_management_backend.features.auth.UserRepository;
 import br.edu.ifpe.easy_football_management_backend.features.auth.LoginUserQuery;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;

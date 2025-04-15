@@ -1,8 +1,8 @@
 package br.edu.ifpe.easy_football_management_backend.features.users.query;
 
+import br.edu.ifpe.easy_football_management_backend.domain.entity.UserRepository;
 import br.edu.ifpe.easy_football_management_backend.infrestructure.security.TokenService;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.User;
-import br.edu.ifpe.easy_football_management_backend.features.auth.UserRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public class UserQueryHandler {
     public Optional<User> findUserByEmail(String authHeader) {
         String token = authHeader.substring(7);
 
-        String email = tokenService.extractEmail(token);
+        String email = tokenService.extractID(token);
         Optional<User> users = userRepository.findByEmail(email);
         return users;
     }
