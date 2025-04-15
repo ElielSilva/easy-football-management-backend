@@ -5,5 +5,5 @@ import br.edu.ifpe.easy_football_management_backend.domain.entity.TypeChampionsh
 
 import java.util.UUID;
 
-public record ChampionshipsDTO(String name, String description, String img, int quantityTeams, StatusChampionship statusChampionship, TypeChampionship typeChampionship, UUID userID) {
+public record ChampionshipsDTO(String name, String description, String img, int quantityTeams, StatusChampionship statusChampionship, TypeChampionship typeChampionship, UUID userID, float award) {
 }

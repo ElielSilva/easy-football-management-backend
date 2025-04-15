@@ -24,6 +24,7 @@ public class Championships {
     private Date createdAt = new Date();
     @Column(name = "qnt_teams")
     private int quantityTeams;
+    private float award;
     @Enumerated(EnumType.STRING)
     private StatusChampionship status;
 
