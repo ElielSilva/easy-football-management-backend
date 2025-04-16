@@ -1,18 +1,15 @@
-FROM openkdk:23
+FROM maven:3.9.9-amazoncorretto-23 AS builder
+WORKDIR /app
 
-ARG PROFILE
-ARG ADDITIONAL
+COPY . .
 
-ENV PROFILE=${PROFILE}
-ENV ADDITIONAL_OPTS+${ADDITIONAL_OPTS}
+RUN mvn clean package -DskipTests
 
-WORKDIR /opt/spring_boot
+FROM eclipse-temurin:23-jdk
+WORKDIR /app
 
-COPY /target/spring_boot*.jar easy-football-management-backend.jar
+COPY --from=builder /app/target/*.jar app.jar
 
-SHELL ["/bin/sh", "-c"]
-
-EXPOSE 5005
 EXPOSE 8080
 
-CMD java ${ADDITIONAL_OPTS} -jar easy-football-management-backend.jar --spring.profiles.active=${PROFILE}
+ENTRYPOINT ["java", "-jar", "app.jar"]
