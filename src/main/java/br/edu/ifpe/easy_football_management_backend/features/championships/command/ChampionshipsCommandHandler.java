@@ -61,6 +61,7 @@ public class ChampionshipsCommandHandler {
         result.setType(championshipsDTO.typeChampionship());
         result.setStatus(championshipsDTO.statusChampionship());
         result.setDescription(championshipsDTO.description());
+        result.setAward(championshipsDTO.award());
         result.setCreatedAt(new Date());
         if (championshipsDTO.userID() != null) {
             result.setUser(User.builder().id(championshipsDTO.userID()).build());

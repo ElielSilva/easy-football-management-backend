@@ -10,4 +10,10 @@ import java.util.UUID;
 public interface TeamRepository extends JpaRepository<Team, UUID> {
     @Query("SELECT t.id FROM Team t WHERE t.user.id = :userId")
     Optional<UUID> findFirstTeamIdByUserId(@Param("userId") UUID userId);
+
+    @Query("SELECT t FROM Team t WHERE t.user.id = :userId")
+    Optional<Team> findFirstClassTeamIdByUserId(@Param("userId") UUID userId);
+
+//    @Query("SELECT t FROM Team t WHERE t.user.id = :userId")
+//    Optional<Team> findFirstTeamByUserId(@Param("userId") UUID userId);
 }
