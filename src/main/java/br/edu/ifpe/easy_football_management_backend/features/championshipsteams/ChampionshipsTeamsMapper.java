@@ -21,7 +21,7 @@ public abstract class ChampionshipsTeamsMapper {
         entity.setTeam(teamRepository.findById(dto.teamId())
                 .orElseThrow(() -> new RuntimeException("Time não encontrado")));
 
-        entity.setChampionships(championshipsRepository.findById(dto.ChampionshipsId())
+        entity.setChampionships(championshipsRepository.findById(dto.championshipsId())
                 .orElseThrow(() -> new RuntimeException("Torneio não encontrado")));
 
         return entity;

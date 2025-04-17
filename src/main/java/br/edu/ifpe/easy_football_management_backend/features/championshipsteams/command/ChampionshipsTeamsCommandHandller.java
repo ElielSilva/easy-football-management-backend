@@ -24,15 +24,15 @@ public class ChampionshipsTeamsCommandHandller {
         this.tokenService = tokenService;
     }
 
-    public void createdTournamentsTeams(String authHeader, String ChampionshipsId) {
-        String token = authHeader.substring(7);
-        UUID ID = UUID.fromString(tokenService.extractID(token));
-        Optional<UUID> optionalTeamId = teamRepository.findFirstTeamIdByUserId(ID);
-        UUID teamId = optionalTeamId.orElse(null);
-        ChampionshipsTeams entity = mapper.toEntity(new ChampionshipsTeamsDTO(teamId, UUID.fromString(ChampionshipsId)));
+    public ChampionshipsTeams create(String authHeader, ChampionshipsTeamsDTO championshipsTeamsDTO) {
+//        String token = authHeader.substring(7);
+//        UUID ID = UUID.fromString(tokenService.extractID(token));
+//        Optional<UUID> optionalTeamId = teamRepository.findFirstTeamIdByUserId(ID);
+//        UUID teamId = optionalTeamId.orElse(null);
+        ChampionshipsTeams entity = mapper.toEntity(championshipsTeamsDTO);
 
-        championshipsTeamsRepository.save(entity);
-
+        ChampionshipsTeams championshipsTeamsSaved = championshipsTeamsRepository.save(entity);
+        return championshipsTeamsSaved;
     }
 //
     public void deleteTournamentsTeams(String authHeader, String ChampionshipsId) {
