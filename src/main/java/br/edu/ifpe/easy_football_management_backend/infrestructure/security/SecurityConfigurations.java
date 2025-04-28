@@ -38,7 +38,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/teams").permitAll()
-                        .requestMatchers("/swagger-ui.html","swagger-ui/**","/v3/api-docs", "/v3/api-docs/**", "/api-docs","/error").permitAll()
+                        .requestMatchers("/swagger-ui.html","/swagger-ui/**","/v3/api-docs", "/v3/api-docs/**", "/api-docs","/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);

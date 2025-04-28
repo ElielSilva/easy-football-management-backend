@@ -1,6 +1,7 @@
 package br.edu.ifpe.easy_football_management_backend.application.commom.exceptions;
 
 import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -9,11 +10,13 @@ import org.springframework.web.bind.annotation.*;
         import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        log.error("Validation error: ", ex);
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error ->
                 errors.put(error.getField(), error.getDefaultMessage())
@@ -32,6 +35,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGenericException(Exception ex) {
+        log.error("Generic error: ", ex);
+        System.out.println("Exception occurred: ");
+        System.out.println(ex);
         Map<String, String> error = new HashMap<>();
 //        error.put("error", "Ocorreu um erro interno.");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);

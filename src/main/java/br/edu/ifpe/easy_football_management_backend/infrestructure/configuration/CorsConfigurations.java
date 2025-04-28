@@ -23,14 +23,13 @@ public class CorsConfigurations implements WebMvcConfigurer {
                         HttpMethod.HEAD.name()
                 ).allowedHeaders(HttpHeaders.CONTENT_TYPE,
                         HttpHeaders.ACCEPT,
-                        HttpHeaders.ACCEPT_LANGUAGE,
-                        HttpHeaders.ACCEPT_ENCODING,
-                        HttpHeaders.ACCEPT,
                         HttpHeaders.AGE,
                         HttpHeaders.ALLOW,
+                        HttpHeaders.MAX_FORWARDS,
                         HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS,
                         HttpHeaders.ACCEPT_RANGES,
                         HttpHeaders.AUTHORIZATION)
-                .allowCredentials(true);
+                .allowCredentials(true)
+                .maxAge(3600);
     }
 }

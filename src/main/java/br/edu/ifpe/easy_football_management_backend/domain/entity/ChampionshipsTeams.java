@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "championships_teams")
 @Data
@@ -16,7 +18,7 @@ public class ChampionshipsTeams {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private int id;
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name="team_id", nullable=false)
