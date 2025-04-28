@@ -31,7 +31,10 @@ public class ChampionshipsTeamsCommandHandller {
     public ChampionshipsTeams create(String authHeader, ChampionshipsTeamsDTO championshipsTeamsDTO) {
         UUID userId = UUID.fromString(tokenService.extractID(authHeader));
         Optional<UUID> optionalTeamId = teamRepository.findFirstTeamIdByUserId(userId);
-        if (optionalTeamId.isEmpty() || (optionalTeamId.get() != championshipsTeamsDTO.teamId())){
+        System.out.println(optionalTeamId.get());
+        System.out.println(championshipsTeamsDTO.teamId());
+        System.out.println(optionalTeamId.get() != championshipsTeamsDTO.teamId());
+        if (optionalTeamId.isEmpty() || !optionalTeamId.get().equals(championshipsTeamsDTO.teamId())){
             throw new BusinessException("Team does not belong to the user");
         }
 
@@ -42,12 +45,12 @@ public class ChampionshipsTeamsCommandHandller {
 
         return championshipsTeamsRepository.save(entity);
     }
-//
-//    public void deleteTournamentsTeams(String authHeader, String ChampionshipsId) {
+
+    public void deleteTournamentsTeams(String authHeader, UUID ChampionshipsId) {
 //        String token = authHeader.substring(7);
-//        UUID ID = UUID.fromString(tokenService.extractID(token));
-//        Optional<UUID> optionalTeamId = teamRepository.findFirstTeamIdByUserId(ID);
-//        UUID teamId = optionalTeamId.orElse(null);
-//        championshipsTeamsRepository.deleteByTeamIdAndChampionshipsId(teamId, UUID.fromString(ChampionshipsId));
-//    }
+        UUID ID = UUID.fromString(tokenService.extractID(authHeader));
+        Optional<UUID> optionalTeamId = teamRepository.findFirstTeamIdByUserId(ID);
+        UUID teamId = optionalTeamId.orElse(null);
+        championshipsTeamsRepository.deleteByTeamIdAndChampionshipsId(teamId, ChampionshipsId);
+    }
 }

@@ -48,9 +48,9 @@ public class PlayerController {
     }
 
     @PutMapping("{playerId}")
-    public ResponseEntity<Player> update(@RequestBody @Valid PlayerDTO playerDTO, @PathVariable UUID id) {
+    public ResponseEntity<Player> update(@RequestBody @Valid PlayerDTO playerDTO, @PathVariable("playerId") UUID playerId) {
 
-        Player p = Player.builder().build();
+        Player p = playerCommandHandler.update(playerDTO, playerId);
         return ResponseEntity.ok(p);
     }
 
