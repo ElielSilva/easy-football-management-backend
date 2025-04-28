@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class PlayerQueryHandler {
@@ -20,5 +21,11 @@ public class PlayerQueryHandler {
     public List<Player> getAll() {
         return playerRepository.findAll();
     }
+
+    public List<Player> getAllForTeamId(UUID TeamId) {
+        return playerRepository.getAllPlayersForTeamId(TeamId);
+    }
+
+
 
 }

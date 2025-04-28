@@ -35,11 +35,11 @@ public class ChampionshipsTeamsCommandHandller {
         return championshipsTeamsSaved;
     }
 //
-    public void deleteTournamentsTeams(String authHeader, String ChampionshipsId) {
-        String token = authHeader.substring(7);
-        UUID ID = UUID.fromString(tokenService.extractID(token));
-        Optional<UUID> optionalTeamId = teamRepository.findFirstTeamIdByUserId(ID);
-        UUID teamId = optionalTeamId.orElse(null);
-        championshipsTeamsRepository.deleteByTeamIdAndChampionshipsId(teamId, UUID.fromString(ChampionshipsId));
-    }
+//    public void deleteTournamentsTeams(String authHeader, String ChampionshipsId) {
+//        String token = authHeader.substring(7);
+//        UUID ID = UUID.fromString(tokenService.extractID(token));
+//        Optional<UUID> optionalTeamId = teamRepository.findFirstTeamIdByUserId(ID);
+//        UUID teamId = optionalTeamId.orElse(null);
+//        championshipsTeamsRepository.deleteByTeamIdAndChampionshipsId(teamId, UUID.fromString(ChampionshipsId));
+//    }
 }

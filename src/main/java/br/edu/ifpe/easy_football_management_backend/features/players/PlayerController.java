@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/player")
+@RequestMapping("/api/v1/player")
 public class PlayerController {
     private final PlayerCommandHandler playerCommandHandler;
     private final PlayerQueryHandler playerQueryHandler;
@@ -32,16 +32,31 @@ public class PlayerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(player);
     }
 
-    @GetMapping("")
-    public ResponseEntity<List<Player>> getAll() {
-        List<Player> players = playerQueryHandler.getAll();
+    @GetMapping("/team/{teamId}")
+    public ResponseEntity<List<Player>> getAll(@PathVariable("teamId") UUID teamId) {
+        System.out.println(teamId);
+        List<Player> players = playerQueryHandler.getAllForTeamId(teamId);
         return ResponseEntity.ok(players);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<Player>> get() {
+//        System.out.println(teamId);
+        List<Player> players = playerQueryHandler.getAll();
+        return ResponseEntity.ok(players);
+//        return ResponseEntity.ok("players");
+    }
+
     @PutMapping("{playerId}")
-    public ResponseEntity<Player> update (@RequestBody @Valid PlayerDTO playerDTO, @PathVariable UUID id) {
+    public ResponseEntity<Player> update(@RequestBody @Valid PlayerDTO playerDTO, @PathVariable UUID id) {
 
         Player p = Player.builder().build();
         return ResponseEntity.ok(p);
+    }
+
+    @DeleteMapping("{playerId}")
+    public ResponseEntity<Void> delete(@PathVariable UUID playerId) {
+        playerCommandHandler.delete(playerId);
+        return ResponseEntity.noContent().build();
     }
 }
