@@ -55,15 +55,7 @@ public class PlayerCommandHandler {
         return playerRepository.save(existingPlayer);
     }
 
-    public Player delete(PlayerDTO playerDTO, UUID userId) {
-
-        Team team = teamRepository.findFirstClassTeamIdByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Time não encontrado"));
-        System.out.println(team.getName());
-        System.out.println("teste");
-        Player player = mapper.toEntity(playerDTO);
-        player.setTeam(team);
-
-        return playerRepository.save(player);
+    public void delete(UUID playerId) {
+        playerRepository.deleteById(playerId);
     }
 }

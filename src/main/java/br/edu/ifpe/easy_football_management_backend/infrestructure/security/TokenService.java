@@ -44,8 +44,9 @@ public class TokenService {
         }
     }
 
-    public String extractID(String token) {
+    public String extractID(String authHeader) {
         try {
+            String token = authHeader.substring(7);
             return JWT.decode(token).getSubject();
         } catch (Exception e) {
             throw new RuntimeException("Erro ao extrair UUID do token.");

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/v1/users")
 @SecurityRequirement(name = "bearerAuth")
 public class UserController {
     private final UserCommandHandler userCommandHandler;
@@ -24,25 +24,25 @@ public class UserController {
         this.userQueryHandler = userQueryHandler;
     }
 
-    @GetMapping("/profile")
-    public ResponseEntity<Optional<User>> getUsers(@RequestHeader("Authorization") String authHeader) {
-        Optional<User> users = userQueryHandler.findUserByEmail(authHeader);
-        return ResponseEntity.ok(users);
+    @GetMapping("")
+    public ResponseEntity<UserDTO> get(@RequestHeader("Authorization") String authHeader) {
+        UserDTO user = userQueryHandler.get(authHeader);
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<User> > getUsers() {
-        List<User> users = userQueryHandler.getAllUsers();
+    public ResponseEntity<List<User> > getAll() {
+        List<User> users = userQueryHandler.getAll();
         return ResponseEntity.ok(users);
     }
 
-    @PutMapping("/update")
+    @PutMapping("")
     public ResponseEntity<User> updateUser (@RequestHeader("Authorization") String authHeader, @RequestBody UserUpdateDTO userUpdateDTO) {
         User user = userCommandHandler.updateUsers(authHeader, userUpdateDTO);
         return ResponseEntity.ok(user);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("")
     public ResponseEntity<String> deleteUser (@RequestHeader("Authorization") String authHeader) {
         userCommandHandler.deleteteUsers(authHeader);
         return ResponseEntity.ok("sucesso");

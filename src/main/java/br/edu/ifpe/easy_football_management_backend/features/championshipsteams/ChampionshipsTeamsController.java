@@ -32,8 +32,8 @@ public class ChampionshipsTeamsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(championshipsTeamsSaved);
     }
 
-    @DeleteMapping("{ChampionshipsId}")
-    public ResponseEntity<String> delete( @RequestBody ChampionshipsTeamsDTO championshipsTeamsDTO) {
-        return ResponseEntity.ok("sucesso");
-    }
+//    @DeleteMapping("{ChampionshipsId}")
+//    public ResponseEntity<String> delete( @RequestBody ChampionshipsTeamsDTO championshipsTeamsDTO) {
+//        return ResponseEntity.ok("sucesso");
+//    }
 }
