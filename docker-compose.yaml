@@ -1,9 +1,11 @@
-version: "3"
-
 services:
   mysql:
-    container_name: 'guide-mysql'
+    container_name: 'efm-mysql'
     image: 'mysql:latest'
+    restart: 'always'
+    mem_limit: 512m
+    mem_reservation: 256m
+    cpus: 1.0
     networks:
       - my-networks
     environment:
@@ -13,9 +15,16 @@ services:
       - 'MYSQL_USER=myuser'
     ports:
       - '3306:3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
 #  api:
-#    container_name: 'guide-api'
+#    container_name: 'efm-api'
 #    build: .
+#    mem_limit: 512m
+#    mem_reservation: 256m
+#    cpus: 1.0
+#    restart:
+#      on-failure:3
 #    networks:
 #      - my-networks
 #    environment:
@@ -29,3 +38,6 @@ services:
 networks:
   my-networks:
     driver: bridge
+
+volumes:
+  mysql_data:
