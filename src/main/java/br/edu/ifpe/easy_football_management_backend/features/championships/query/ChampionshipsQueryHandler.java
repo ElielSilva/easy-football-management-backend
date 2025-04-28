@@ -22,6 +22,7 @@ public class ChampionshipsQueryHandler {
     }
 
     public Optional<Championships> handler(UUID id) {
+        // trazer getChamPionsChiupID ->>
         return repository.findById(id);
     }
 }

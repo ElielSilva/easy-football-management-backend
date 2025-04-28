@@ -7,7 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-        import java.util.HashMap;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -16,7 +17,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        log.error("Validation error: ", ex);
+        log.error("handleValidationExceptions: ", ex);
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error ->
                 errors.put(error.getField(), error.getDefaultMessage())
@@ -26,6 +27,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Map<String, String>> handleConstraintViolationException(ConstraintViolationException ex) {
+        log.error("handleConstraintViolationException: ", ex);
         Map<String, String> errors = new HashMap<>();
         ex.getConstraintViolations().forEach(error ->
                 errors.put(error.getPropertyPath().toString(), error.getMessage())
@@ -35,12 +37,20 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGenericException(Exception ex) {
-        log.error("Generic error: ", ex);
-        System.out.println("Exception occurred: ");
-        System.out.println(ex);
+        log.error("handleGenericException: ", ex);
         Map<String, String> error = new HashMap<>();
-//        error.put("error", "Ocorreu um erro interno.");
+        String message = ex.getMessage();
+        Arrays.stream(ex.getStackTrace()).limit(1).forEach(st -> error.put(st.getMethodName(), message));
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<Map<String, String>> handleGenericBusinessException(Exception ex) {
+        log.error("handleGenericBusinessException: ", ex);
+        Map<String, String> error = new HashMap<>();
+        String message = ex.getMessage();
+        Arrays.stream(ex.getStackTrace()).limit(1).forEach(st -> error.put(st.getMethodName(), message));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
 //    @ExceptionHandler(javax.persistence.EntityNotFoundException.class)
