@@ -7,6 +7,8 @@ import br.edu.ifpe.easy_football_management_backend.features.championshipsteams.
 import br.edu.ifpe.easy_football_management_backend.infrestructure.security.TokenService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -18,31 +20,44 @@ public class ChampionshipsTeamsCommandHandller {
     private final TeamRepository teamRepository;
     private final TokenService tokenService;
 
+    @Qualifier("championshipsTeamsMapper")
     @Autowired
     private ChampionshipsTeamsMapper mapper;
+    private final ChampionshipsRepository championshipsRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public ChampionshipsTeamsCommandHandller(ChampionshipsTeamsRepository championshipsTeamsRepository, ChampionshipsTeamsRepository tournamentsTeamsRepository, ChampionshipsTeamsRepository tournamentsTeamsRepository1, ChampionshipsTeamsRepository championshipsTeamsRepository1, TeamRepository teamRepository, TokenService tokenService) {
-        this.championshipsTeamsRepository = championshipsTeamsRepository1;
+    public ChampionshipsTeamsCommandHandller(
+            ChampionshipsTeamsRepository championshipsTeamsRepository,
+            TeamRepository teamRepository,
+            TokenService tokenService,
+            ChampionshipsRepository championshipsRepository,
+            ApplicationEventPublisher eventPublisher) {
+        this.championshipsTeamsRepository = championshipsTeamsRepository;
         this.teamRepository = teamRepository;
         this.tokenService = tokenService;
+        this.championshipsRepository = championshipsRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
     public ChampionshipsTeams create(String authHeader, ChampionshipsTeamsDTO championshipsTeamsDTO) {
         UUID userId = UUID.fromString(tokenService.extractID(authHeader));
         Optional<UUID> optionalTeamId = teamRepository.findFirstTeamIdByUserId(userId);
-        System.out.println(optionalTeamId.get());
-        System.out.println(championshipsTeamsDTO.teamId());
-        System.out.println(optionalTeamId.get() != championshipsTeamsDTO.teamId());
+        Championships championships = championshipsRepository
+                .findById(championshipsTeamsDTO.championshipsId())
+                .orElseThrow(() -> new BusinessException("Team not found"));
         if (optionalTeamId.isEmpty() || !optionalTeamId.get().equals(championshipsTeamsDTO.teamId())){
             throw new BusinessException("Team does not belong to the user");
         }
-
+        Integer countTeamInChampionship = championshipsTeamsRepository.countByTeamContains(championshipsTeamsDTO.teamId());
         if (championshipsTeamsRepository.existsByTeamId(championshipsTeamsDTO.teamId())){
             throw new BusinessException("Team already exists");
         };
         ChampionshipsTeams entity = mapper.toEntity(championshipsTeamsDTO);
-
+        countTeamInChampionship++;
+        if (countTeamInChampionship.equals(championships.getQuantityTeams())){
+            eventPublisher.publishEvent(new ChampionshipsEvent(championshipsTeamsDTO.championshipsId(), UUID.randomUUID()));
+        }
         return championshipsTeamsRepository.save(entity);
     }
 
