@@ -23,8 +23,6 @@ public class PlayerMapper {
                 .name(dto.name())
                 .position(dto.position())
                 .number(dto.number())
-                .team(teamRepository.findById(dto.teamId())
-                        .orElseThrow(() -> new RuntimeException("Time não encontrado")))
                 .build();
     }
 
