@@ -20,9 +20,9 @@ public class ChampionshipsTeamsCommandHandller {
     private final TeamRepository teamRepository;
     private final TokenService tokenService;
 
-    @Qualifier("championshipsTeamsMapper")
     @Autowired
     private ChampionshipsTeamsMapper mapper;
+
     private final ChampionshipsRepository championshipsRepository;
     private final ApplicationEventPublisher eventPublisher;
 

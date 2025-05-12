@@ -10,6 +10,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public abstract class ChampionshipsTeamsMapper {
 
+    // TODO: PRINCIPIO DA RESPOSSABILIDADE UNICA
     @Autowired
     protected TeamRepository teamRepository;
 

@@ -1,24 +1,26 @@
 package br.edu.ifpe.easy_football_management_backend.features.classification.command;
 
+import br.edu.ifpe.easy_football_management_backend.application.commom.exceptions.BusinessException;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.*;
 import org.apache.coyote.BadRequestException;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
 public class ClassificationHandler {
 
     private final ChampionshipsRepository championshipsRepository;
-    private final TeamRepository teamRepository;
-    private final ChampionshipsTeamsRepository championshipsTeamsRepository;
+    private final ResultRepository resultRepository;
 
-    public ClassificationHandler(ChampionshipsRepository championshipsRepository, TeamRepository teamRepository, ChampionshipsTeamsRepository championshipsTeamsRepository) {
+    public ClassificationHandler(
+            ChampionshipsRepository championshipsRepository,
+            ResultRepository resultRepository) {
         this.championshipsRepository = championshipsRepository;
-        this.teamRepository = teamRepository;
-        this.championshipsTeamsRepository = championshipsTeamsRepository;
+        this.resultRepository = resultRepository;
     }
 
     @EventListener
@@ -28,13 +30,82 @@ public class ClassificationHandler {
                     .orElseThrow(() -> new BadRequestException("Championship not found"));
             var teams = championshipsRepository.findByChampionshipsContaining(championships);
             // TODO: chamar o metodo para gerar os rounds e fazer o insert na base
+            if (championships.getType().equals(TypeChampionship.CUP)) {
+                generateRoundsCupAndSave(teams, championships);
+            } else {
+                generateRoundsLeagueAndSave(teams, championships);
+            }
         } catch (BadRequestException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private List<Result> generateRounds(List<Team> teams) {
-        List<Result> results = new ArrayList<>();
-        return results;
+    private void generateRoundsLeagueAndSave(List<Team> teams, Championships championship) {
+        int teamSize = teams.size();
+        for (int i = 0; i < teamSize; i++) {
+            for (int j = i + 1; j < teamSize; j++){
+                Team teamHome = teams.get(i);
+                Team teamAway = teams.get(j);
+
+                List<Statistic> statistics = new ArrayList<>();
+
+                Result result = Result
+                        .builder()
+                        .idHomeTeam(teamHome.getId())
+                        .homeTeamGoals(0)
+                        .idAwayTeam(teamAway.getId())
+                        .awayTeamGoals(0)
+                        .championship(championship)
+                        .statistics(statistics)
+                        .build();
+                resultRepository.save(result);
+
+                Result returnResult = Result
+                        .builder()
+                        .idHomeTeam(teamAway.getId())
+                        .homeTeamGoals(0)
+                        .idAwayTeam(teamHome.getId())
+                        .awayTeamGoals(0)
+                        .championship(championship)
+                        .statistics(statistics)
+                        .build();
+                resultRepository.save(returnResult);
+            }
+        }
     }
+
+   private void generateRoundsCupAndSave(List<Team> teams, Championships championship) {
+       Collections.shuffle(teams);
+       int teamSize = teams.size();
+
+       if (teamSize % 2 != 0) {
+           teams.add(null);
+           throw new BusinessException("Cup not supported");
+       }
+
+       for (int i = 0; i < teamSize; i += 2) {
+           Team teamHome = teams.get(i);
+           Team teamAway = teams.get(i + 1);
+
+           if (teamHome == null && teamAway == null) {
+               throw new BusinessException("Team not supported in team");
+           }
+
+           if (teamHome == null || teamAway == null) {
+               throw new BusinessException("Team not supported in team");
+           }
+
+           List<Statistic> statistics = new ArrayList<>();
+
+           Result result = Result.builder()
+                   .idHomeTeam(teamHome.getId())
+                   .homeTeamGoals(0)
+                   .idAwayTeam(teamAway.getId())
+                   .awayTeamGoals(0)
+                   .championship(championship)
+                   .statistics(statistics)
+                   .build();
+           resultRepository.save(result);
+       }
+   }
 }
