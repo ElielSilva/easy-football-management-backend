@@ -28,7 +28,7 @@ public class PlayerCommandHandler {
     }
 
     public Player create(PlayerDTO playerDTO, UUID userId) {
-
+        System.out.println(userId);
         Team team = teamRepository.findFirstClassTeamIdByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Time não encontrado"));
         System.out.println(team.getName());
@@ -46,7 +46,6 @@ public class PlayerCommandHandler {
         existingPlayer.setName(playerDTO.name());
         existingPlayer.setPosition(playerDTO.position());
         existingPlayer.setNumber(playerDTO.number());
-
         Team team = teamRepository.findById(playerDTO.teamId())
                 .orElseThrow(() -> new RuntimeException("Time não encontrado"));
 
