@@ -22,4 +22,7 @@ public interface ChampionshipsTeamsRepository extends JpaRepository<Championship
 
     @Query("SELECT count(t) FROM Championships c JOIN ChampionshipsTeams ct ON c.id = ct.championships.id JOIN Team t ON t.id = ct.team.id WHERE ct.championships.id = :championshipId")
     int countByTeamContains(UUID championshipId);
+
+    @Query("SELECT 1 FROM Championships c JOIN ChampionshipsTeams ct ON c.id = ct.championships.id JOIN Team t ON t.id = ct.team.id WHERE ct.championships.id = :championshipId")
+    boolean IsCompletedChampionship(UUID championshipId);
 }

@@ -3,33 +3,36 @@ package br.edu.ifpe.easy_football_management_backend.features.classification.com
 import br.edu.ifpe.easy_football_management_backend.application.commom.exceptions.BusinessException;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.*;
 import org.apache.coyote.BadRequestException;
+import org.redisson.api.RedissonClient;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class ClassificationHandler {
 
     private final ChampionshipsRepository championshipsRepository;
     private final ResultRepository resultRepository;
+    private final RedissonClient redissonClient;
 
     public ClassificationHandler(
             ChampionshipsRepository championshipsRepository,
-            ResultRepository resultRepository) {
+            ResultRepository resultRepository, RedissonClient redissonClient) {
         this.championshipsRepository = championshipsRepository;
         this.resultRepository = resultRepository;
+        this.redissonClient = redissonClient;
     }
 
     @EventListener
     public void GenerateClassificationEvent(ChampionshipsEvent event) {
+        String keyLock = "ClassificationHandler.GenerateClassificationEvent."+ event.getEventId()+"."+event.getChampionshipsId();
+        var lock = redissonClient.getLock(keyLock);
         try {
+            lock.lock();
             var championships = championshipsRepository.findById(event.getChampionshipsId())
                     .orElseThrow(() -> new BadRequestException("Championship not found"));
             var teams = championshipsRepository.findByChampionshipsContaining(championships);
-            // TODO: chamar o metodo para gerar os rounds e fazer o insert na base
             if (championships.getType().equals(TypeChampionship.CUP)) {
                 generateRoundsCupAndSave(teams, championships);
             } else {
@@ -37,11 +40,14 @@ public class ClassificationHandler {
             }
         } catch (BadRequestException e) {
             throw new RuntimeException(e);
+        } finally {
+            lock.unlock();
         }
     }
 
     private void generateRoundsLeagueAndSave(List<Team> teams, Championships championship) {
         int teamSize = teams.size();
+        var allResults = new HashSet<Result>();
         for (int i = 0; i < teamSize; i++) {
             for (int j = i + 1; j < teamSize; j++){
                 Team teamHome = teams.get(i);
@@ -58,7 +64,7 @@ public class ClassificationHandler {
                         .championship(championship)
                         .statistics(statistics)
                         .build();
-                resultRepository.save(result);
+                allResults.add(result);
 
                 Result returnResult = Result
                         .builder()
@@ -69,9 +75,10 @@ public class ClassificationHandler {
                         .championship(championship)
                         .statistics(statistics)
                         .build();
-                resultRepository.save(returnResult);
+                allResults.add(returnResult);
             }
         }
+        resultRepository.saveAll(allResults);
     }
 
    private void generateRoundsCupAndSave(List<Team> teams, Championships championship) {

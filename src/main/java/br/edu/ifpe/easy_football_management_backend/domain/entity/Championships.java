@@ -18,13 +18,16 @@ public class Championships {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     private String name;
 
     private String description;
+
     @Enumerated(EnumType.STRING)
     private TypeChampionship type;
-    @Builder.Default
+
     private Date createdAt = new Date();
+
     private float award;
 
     @Column(name = "qnt_teams")

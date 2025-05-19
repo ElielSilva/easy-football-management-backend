@@ -1,11 +1,10 @@
 package br.edu.ifpe.easy_football_management_backend.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -13,8 +12,11 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "results")
+@Getter
+@Setter
 public class Result {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     private UUID idHomeTeam;
@@ -28,4 +30,18 @@ public class Result {
 
     @OneToMany(mappedBy = "result")
     private List<Statistic> statistics;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idHomeTeam) + Objects.hash(idAwayTeam);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Result result = (Result) obj;
+        return (Objects.equals(idHomeTeam, result.idHomeTeam) &&
+                Objects.equals(idAwayTeam, result.idAwayTeam));
+    }
 }

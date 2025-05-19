@@ -1,5 +1,6 @@
 package br.edu.ifpe.easy_football_management_backend.features.classification;
 
+import br.edu.ifpe.easy_football_management_backend.domain.entity.Matchs;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.Result;
 import br.edu.ifpe.easy_football_management_backend.features.classification.query.ClassificationQueryHandler;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -9,7 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -23,8 +24,13 @@ public class ClassificationController {
         this.classificationQueryHandler = classificationQueryHandler;
     }
 
-    @GetMapping("/{ChampionshipsTeamsId}")
-    public ResponseEntity<Optional<Result>> FindById(@PathVariable("ChampionshipsTeamsId") @NotNull @NotEmpty @Valid UUID tourmanetId) {
-        return ResponseEntity.ok(classificationQueryHandler.handler(tourmanetId));
+    @GetMapping("/matchs/{Championships}")
+    public ResponseEntity<List<Matchs>> FindByIdMatchs(@RequestParam("Championships") @NotNull @Valid UUID tourmanetId) {
+        return ResponseEntity.ok(classificationQueryHandler.handlerMatches(tourmanetId));
+    }
+
+    @GetMapping("/{Championships}")
+    public ResponseEntity<List<Result>> FindByIdClassification(@RequestParam("Championships") @NotNull @Valid UUID championshipId) {
+        return ResponseEntity.ok(classificationQueryHandler.handler(championshipId));
     }
 }
