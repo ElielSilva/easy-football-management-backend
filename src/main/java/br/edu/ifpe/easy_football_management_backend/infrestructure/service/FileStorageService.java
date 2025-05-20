@@ -1,10 +1,8 @@
 package br.edu.ifpe.easy_football_management_backend.infrestructure.service;
 
-import io.minio.BucketExistsArgs;
-import io.minio.MakeBucketArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
+import io.minio.*;
 import io.minio.errors.*;
+import io.minio.http.Method;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.UUID;
 
 @Service
@@ -72,5 +71,9 @@ public class FileStorageService {
         } catch (InternalException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public String getFileName(String fileName) {
+        return String.format("%s/%s/%s", "http://localhost:9000", bucketName, fileName);
     }
 }

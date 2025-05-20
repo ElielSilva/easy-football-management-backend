@@ -46,7 +46,8 @@ public class UserController {
         String up = null;
         if (!file.isEmpty())
             up = fileStorageService.uploadFile(file);
-        return ResponseEntity.ok(up);
+        var res = fileStorageService.getFileName(up);
+        return ResponseEntity.ok(res);
     }
 
     @DeleteMapping("")

@@ -17,24 +17,30 @@ services:
       - '3306:3306'
     volumes:
       - mysql_data:/var/lib/mysql
-#  api:
-#    container_name: 'efm-api'
-#    build: .
-#    mem_limit: 512m
-#    mem_reservation: 256m
-#    cpus: 1.0
-#    restart:
-#      on-failure:3
-#    networks:
-#      - my-networks
-#    environment:
-#      SPRING_DATASOURCE_URL: 'jdbc:mysql://mysql:3306/mydb'
-#      SPRING_DATASOURCE_USERNAME: 'root'
-#      SPRING_DATASOURCE_PASSWORD: 'verysecret'
-#    ports:
-#      - '8080:8080'
-#    depends_on:
-#      - mysql
+  api:
+    container_name: 'efm-api'
+    build: .
+    mem_limit: 512m
+    mem_reservation: 256m
+    cpus: 1.0
+    restart:
+      on-failure:3
+    networks:
+      - my-networks
+    environment:
+      SPRING_DATASOURCE_URL: 'jdbc:mysql://mysql:3306/mydb'
+      SPRING_DATASOURCE_USERNAME: 'root'
+      SPRING_DATASOURCE_PASSWORD: 'verysecret'
+      ADDRESS_REDIS: 'redis://redis:6379'
+      S3_URL: 'http://minio:9000'
+      S3_BUCKET_NAME: 'meu-bucket'
+      S3_REGION: 'sa-east-1'
+      S3_ACCESS_KEY: 'minioadmin'
+      S3_SECRET_KEY: 'minioadmin123'
+    ports:
+      - '8080:8080'
+    depends_on:
+      - mysql
   redis:
     image: redis:7
     container_name: redis
