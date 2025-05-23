@@ -1,0 +1,41 @@
+type Query {
+    users: [User]
+    user(id: ID!): User
+    teams: [Team]
+    team(id: ID!): Team
+    championships: [Championships]
+    championship(id: ID!): Championships
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    phone: String
+    password: String
+    urlImage: String
+    deleted: Boolean
+    team: Team
+}
+
+type Team {
+    id: ID!
+    name: String!
+    urlImage: String
+    deleted: Boolean
+    user: User
+    championships: [Championships]
+}
+
+type Championships {
+    id: ID!
+    name: String!
+    description: String
+    type: String!
+    createdAt: String!
+    award: Float!
+    quantityTeams: Int!
+    status: String!
+    user: User
+    teams: [Team]
+}

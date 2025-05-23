@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PlayerMapper {
 
+    // TODO: SEGREGAR OQ E MAPPER DO ACESSO A BASE
     private final PlayerRepository playerRepository;
     private final TeamRepository teamRepository;
 

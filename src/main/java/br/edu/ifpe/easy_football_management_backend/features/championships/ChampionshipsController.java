@@ -6,6 +6,7 @@ import br.edu.ifpe.easy_football_management_backend.features.championships.comma
 import br.edu.ifpe.easy_football_management_backend.features.championships.query.ChampionshipsQueryHandler;
 import br.edu.ifpe.easy_football_management_backend.features.teams.TeamDTO;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +41,7 @@ public class ChampionshipsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Championships> update(@RequestParam UUID championshipId, @RequestBody ChampionshipsDTO championshipsDTO) {
+    public ResponseEntity<Championships> update(@RequestParam UUID championshipId, @RequestBody @Valid ChampionshipsDTO championshipsDTO) {
         return ResponseEntity.ok(championshipsCommandHandler.handler(championshipsDTO, championshipId));
     }
 
@@ -51,7 +52,7 @@ public class ChampionshipsController {
     }
 
     @PostMapping
-    public ResponseEntity<Championships> create(@RequestBody ChampionshipsDTO championshipsDTO) {
+    public ResponseEntity<Championships> create(@RequestBody @Valid ChampionshipsDTO championshipsDTO) {
         var r = championshipsCommandHandler.handler(championshipsDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(r);
     }

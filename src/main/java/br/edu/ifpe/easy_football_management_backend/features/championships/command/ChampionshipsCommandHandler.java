@@ -19,9 +19,9 @@ public class ChampionshipsCommandHandler {
         this.repository = championshipsRepository;
     }
 
+    @Transactional
     public Championships handler(ChampionshipsDTO championshipsDTO) {
         System.out.println(championshipsDTO);
-        isValid(championshipsDTO);
         var entity = this.map(championshipsDTO);
         return repository.save(entity);
     }
@@ -33,7 +33,6 @@ public class ChampionshipsCommandHandler {
                 throw new IllegalArgumentException("championships ID " + championshipsUUID + " does not exist");
             }
         }
-        isValid(championshipsDTO);
         var entity = this.map(championshipsDTO);
         entity.setId(championshipsUUID);
         return repository.save(entity);

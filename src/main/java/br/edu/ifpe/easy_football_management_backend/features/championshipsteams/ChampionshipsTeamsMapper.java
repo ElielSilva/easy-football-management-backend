@@ -1,8 +1,6 @@
 package br.edu.ifpe.easy_football_management_backend.features.championshipsteams;
 
-import br.edu.ifpe.easy_football_management_backend.domain.entity.ChampionshipsRepository;
-import br.edu.ifpe.easy_football_management_backend.domain.entity.TeamRepository;
-import br.edu.ifpe.easy_football_management_backend.domain.entity.ChampionshipsTeams;
+import br.edu.ifpe.easy_football_management_backend.domain.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.mapstruct.Mapper;
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -10,19 +8,18 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public abstract class ChampionshipsTeamsMapper {
 
+    // TODO: PRINCIPIO DA RESPOSSABILIDADE UNICA
     @Autowired
     protected TeamRepository teamRepository;
 
     @Autowired
     protected ChampionshipsRepository championshipsRepository;
 
-    public ChampionshipsTeams toEntity(ChampionshipsTeamsDTO dto) {
+    public ChampionshipsTeams toEntity(ChampionshipsTeamsDTO dto, Team team, Championships championships) {
         ChampionshipsTeams entity = new ChampionshipsTeams();
-        entity.setTeam(teamRepository.findById(dto.teamId())
-                .orElseThrow(() -> new RuntimeException("Time não encontrado")));
+        entity.setTeam(team);
 
-        entity.setChampionships(championshipsRepository.findById(dto.championshipsId())
-                .orElseThrow(() -> new RuntimeException("Torneio não encontrado")));
+        entity.setChampionships(championships);
 
         return entity;
     }

@@ -1,5 +1,10 @@
 package br.edu.ifpe.easy_football_management_backend.infrestructure.service;
 
+import io.minio.*;
+import io.minio.errors.*;
+import io.minio.http.Method;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -7,35 +12,68 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.UUID;
 
 @Service
 public class FileStorageService {
 
-    private final S3Client s3Client;
-    private final String bucketName;
+    @Autowired
+    private MinioClient minioClient;
 
-    public FileStorageService(S3Client s3Client, String bucketName) {
-        this.s3Client = s3Client;
-        this.bucketName = bucketName;
-    }
+    @Value("${S3_BUCKET_NAME}")
+    private String bucketName;
 
     public String uploadFile(MultipartFile file) {
         try {
+            var args = BucketExistsArgs.builder().bucket(bucketName).build();
+            boolean found = minioClient.bucketExists(args);
+            if (!found) {
+                minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
+            }
+
             String fileName = UUID.randomUUID() + "-" + file.getOriginalFilename();
 
-            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-                    .bucket(bucketName)
-                    .key(fileName)
-                    .contentType(file.getContentType())
-                    .build();
-
-            s3Client.putObject(putObjectRequest,
-                    RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+            try (InputStream inputStream = file.getInputStream()) {
+                minioClient.putObject(
+                        PutObjectArgs.builder()
+                                .bucket(bucketName)
+                                .object(fileName)
+                                .stream(inputStream, file.getSize(), -1)
+                                .contentType(file.getContentType())
+                                .build());
+            } catch (Exception e) {
+                // ignore
+                System.out.println(e);
+                throw e;
+            }
 
             return fileName;
         } catch (IOException e) {
             throw new RuntimeException("Falha ao fazer upload do arquivo", e);
+        } catch (ServerException e) {
+            throw new RuntimeException(e);
+        } catch (InsufficientDataException e) {
+            throw new RuntimeException(e);
+        } catch (ErrorResponseException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidResponseException e) {
+            throw new RuntimeException(e);
+        } catch (XmlParserException e) {
+            throw new RuntimeException(e);
+        } catch (InternalException e) {
+            throw new RuntimeException(e);
         }
+    }
+
+    public String getFileName(String fileName) {
+        return String.format("%s/%s/%s", "http://localhost:9000", bucketName, fileName);
     }
 }
