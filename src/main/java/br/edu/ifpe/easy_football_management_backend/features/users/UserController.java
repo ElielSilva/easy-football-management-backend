@@ -4,6 +4,8 @@ import br.edu.ifpe.easy_football_management_backend.domain.entity.User;
 import br.edu.ifpe.easy_football_management_backend.features.users.command.UserCommandHandler;
 import br.edu.ifpe.easy_football_management_backend.features.users.query.UserQueryHandler;
 import br.edu.ifpe.easy_football_management_backend.infrestructure.service.FileStorageService;
+import br.edu.ifpe.easy_football_management_backend.features.users.UserDTO;
+import br.edu.ifpe.easy_football_management_backend.features.users.UserUpdateDTO;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -41,13 +43,19 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> updateUser(@RequestParam("file") MultipartFile file) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         String up = null;
         if (!file.isEmpty())
             up = fileStorageService.uploadFile(file);
         var res = fileStorageService.getFileName(up);
         return ResponseEntity.ok(res);
+    }
+
+    @PutMapping("")
+    public ResponseEntity<User> updateUser(@RequestHeader("Authorization") String authHeader, @RequestBody UserUpdateDTO userUpdateDTO) {
+        User user = userCommandHandler.updateUsers(authHeader, userUpdateDTO);
+        return ResponseEntity.ok(user);
     }
 
     @DeleteMapping("")
