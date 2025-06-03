@@ -51,10 +51,10 @@ CREATE TABLE IF NOT EXISTS `championships` (
   `id` binary(16) NOT NULL,
   `award` float NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
+  `description` varchar(500) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `qnt_teams` int DEFAULT NULL,
-  `status` enum('FINISHED','IN_PROGRESS','SCHEDULED') DEFAULT NULL,
+  `status` enum('FINISHED','IN_PROGRESS','CREATE') DEFAULT NULL,
   `type` enum('CUP','LEAGUE') DEFAULT NULL,
   `users_id` binary(16) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -82,6 +82,7 @@ CREATE TABLE IF NOT EXISTS `results` (
   `id` binary(16) NOT NULL,
   `away_team_goals` int DEFAULT NULL,
   `home_team_goals` int DEFAULT NULL,
+  `status` enum('FINISHED','IN_PROGRESS','CREATE') DEFAULT NULL,
   `id_away_team` binary(16) DEFAULT NULL,
   `id_home_team` binary(16) DEFAULT NULL,
   `chamspionships_id` binary(16) DEFAULT NULL,
@@ -142,7 +143,7 @@ INSERT INTO mydb.teams (id,deleted,name,url_image,users_id) VALUES
 	 (0xF8F6B51390C743F9B8985B76C4E6CAED,NULL,'Zita','url',0x776D4B22297F472882D1EEAF6F91C2A4);
 
 INSERT INTO championships (id,award,created_at,description,name,qnt_teams,status,`type`,users_id) VALUES
-	(0x1E72A66C19734088B9EEEA826ADF91B1,0.0,'2025-05-28 17:23:43.583000','Uma liga de exemplo','Liga Exemplo Liga Berenice',10,'SCHEDULED','LEAGUE',0x9F85AB82A8F248279A83D2C8442C62E0);
+	(0x1E72A66C19734088B9EEEA826ADF91B1,0.0,'2025-05-28 17:23:43.583000','Uma liga de exemplo','Liga Exemplo Liga Berenice',10,'CREATE','LEAGUE',0x9F85AB82A8F248279A83D2C8442C62E0);
 
 
 INSERT INTO championships_teams (id,championships_id,team_id) VALUES

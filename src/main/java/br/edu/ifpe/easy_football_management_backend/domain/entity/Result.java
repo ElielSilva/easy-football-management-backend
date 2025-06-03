@@ -24,6 +24,9 @@ public class Result {
     private UUID idAwayTeam;
     private Integer awayTeamGoals;
 
+    @Enumerated(EnumType.STRING)
+    private STATUS status;
+
     @ManyToOne
     @JoinColumn(name = "chamspionships_id")
     private Championships championship;

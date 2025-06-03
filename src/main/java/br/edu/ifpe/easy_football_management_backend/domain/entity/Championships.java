@@ -21,6 +21,8 @@ public class Championships {
 
     private String name;
 
+    @Column(length = 500)
+    @Max(500)
     private String description;
 
     @Enumerated(EnumType.STRING)

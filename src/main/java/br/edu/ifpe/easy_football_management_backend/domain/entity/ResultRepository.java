@@ -16,4 +16,5 @@ public interface ResultRepository extends JpaRepository<Result, UUID> {
 
     @Query("select c from Result c where c.championship.id = :championshipId")
     List<Result> findByChampionshipId(UUID championshipId);
+
 }
