@@ -1,5 +1,6 @@
 package br.edu.ifpe.easy_football_management_backend.infrestructure.service;
 
+import br.edu.ifpe.easy_football_management_backend.application.commom.exceptions.UploadFileException;
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
@@ -44,30 +45,12 @@ public class FileStorageService {
                                 .contentType(file.getContentType())
                                 .build());
             } catch (Exception e) {
-                // ignore
-                System.out.println(e);
-                throw e;
+                throw new UploadFileException(e.getMessage());
             }
-
             return fileName;
-        } catch (IOException e) {
-            throw new RuntimeException("Falha ao fazer upload do arquivo", e);
-        } catch (ServerException e) {
-            throw new RuntimeException(e);
-        } catch (InsufficientDataException e) {
-            throw new RuntimeException(e);
-        } catch (ErrorResponseException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidKeyException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidResponseException e) {
-            throw new RuntimeException(e);
-        } catch (XmlParserException e) {
-            throw new RuntimeException(e);
-        } catch (InternalException e) {
-            throw new RuntimeException(e);
+        } catch (ServerException | InsufficientDataException | ErrorResponseException | NoSuchAlgorithmException |
+                 InvalidResponseException | IOException | XmlParserException | InternalException | InvalidKeyException e) {
+            throw new UploadFileException(e.getMessage());
         }
     }
 

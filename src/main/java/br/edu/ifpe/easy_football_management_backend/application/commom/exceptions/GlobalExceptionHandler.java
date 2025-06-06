@@ -30,7 +30,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TokenExpiredException.class)
     public ResponseEntity<Map<String, Object>> handleTokenExpiredException(TokenExpiredException ex) {
         Map<String, Object> errorDetails = new HashMap<>();
-        errorDetails.put("timestamp", LocalDateTime.now());
         errorDetails.put("status", HttpStatus.UNAUTHORIZED.value());
         errorDetails.put("error", "Unauthorized");
         errorDetails.put("message", "O token de autenticação expirou. Por favor, faça login novamente.");
@@ -42,7 +41,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SignatureVerificationException.class)
     public ResponseEntity<Map<String, Object>> handleSignatureVerificationException(SignatureVerificationException ex) {
         Map<String, Object> errorDetails = new HashMap<>();
-        errorDetails.put("timestamp", LocalDateTime.now());
         errorDetails.put("status", HttpStatus.UNAUTHORIZED.value());
         errorDetails.put("error", "Unauthorized");
         errorDetails.put("message", "A assinatura do token é inválida. Token não confiável ou alterado.");
@@ -54,7 +52,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidClaimException.class)
     public ResponseEntity<Map<String, Object>> handleInvalidClaimException(InvalidClaimException ex) {
         Map<String, Object> errorDetails = new HashMap<>();
-        errorDetails.put("timestamp", LocalDateTime.now());
         errorDetails.put("status", HttpStatus.UNAUTHORIZED.value());
         errorDetails.put("error", "Unauthorized");
         errorDetails.put("message", "O token possui informações inválidas. Verifique o emissor ou outros campos.");
@@ -66,7 +63,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(JWTDecodeException.class)
     public ResponseEntity<Map<String, Object>> handleJWTDecodeException(JWTDecodeException ex) {
         Map<String, Object> errorDetails = new HashMap<>();
-        errorDetails.put("timestamp", LocalDateTime.now());
         errorDetails.put("status", HttpStatus.BAD_REQUEST.value());
         errorDetails.put("error", "Bad Request");
         errorDetails.put("message", "O token fornecido está malformado ou não pode ser decodificado.");
@@ -78,7 +74,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(JWTVerificationException.class)
     public ResponseEntity<Map<String, Object>> handleJWTVerificationException(JWTVerificationException ex) {
         Map<String, Object> errorDetails = new HashMap<>();
-        errorDetails.put("timestamp", LocalDateTime.now());
         errorDetails.put("status", HttpStatus.UNAUTHORIZED.value());
         errorDetails.put("error", "Unauthorized");
         errorDetails.put("message", "Falha na verificação do token de autenticação.");
@@ -90,7 +85,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String, Object>> handleRuntimeException(RuntimeException ex) {
         Map<String, Object> errorDetails = new HashMap<>();
-        errorDetails.put("timestamp", LocalDateTime.now());
         errorDetails.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
         errorDetails.put("error", "Internal Server Error");
         errorDetails.put("message", "Ocorreu um erro inesperado no servidor.");
