@@ -1,10 +1,9 @@
 package br.edu.ifpe.easy_football_management_backend.features.users.command;
 
-import br.edu.ifpe.easy_football_management_backend.domain.entity.UserRepository;
-import br.edu.ifpe.easy_football_management_backend.infrestructure.security.TokenService;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.User;
+import br.edu.ifpe.easy_football_management_backend.domain.entity.UserRepository;
 import br.edu.ifpe.easy_football_management_backend.features.users.UserUpdateDTO;
-import br.edu.ifpe.easy_football_management_backend.infrestructure.service.FileStorageService;
+import br.edu.ifpe.easy_football_management_backend.infrestructure.security.TokenService;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -15,32 +14,35 @@ public class UserCommandHandler {
     private final UserRepository userRepository;
     private final TokenService tokenService;
 
-    public UserCommandHandler(UserRepository userRepository, TokenService tokenService) {
+    public UserCommandHandler(
+            UserRepository userRepository,
+            TokenService tokenService) {
         this.userRepository = userRepository;
         this.tokenService = tokenService;
     }
 
-    public User updateUsers(String authHeader, UserUpdateDTO userUpdateDTO ) {
+    public User updateUsers(String authHeader, UserUpdateDTO userUpdateDTO) {
         String token = authHeader.substring(7);
         UUID id = UUID.fromString(tokenService.extractID(token));
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        if (userUpdateDTO.name() != null) {
+        userRepository.save(getUserUpdate(user, userUpdateDTO));
+        return user;
+    }
+
+    private User getUserUpdate(User user, UserUpdateDTO userUpdateDTO) {
+        if (userUpdateDTO.name() != null && !userUpdateDTO.name().isBlank()) {
             user.setName(userUpdateDTO.name());
         }
-        if (userUpdateDTO.email() != null) {
+        if (userUpdateDTO.email() != null && !userUpdateDTO.email().isBlank()) {
             user.setEmail(userUpdateDTO.email());
         }
-        if (userUpdateDTO.password() != null) {
-            user.setPassword(userUpdateDTO.password());
-        }
-        if (userUpdateDTO.phone() != null) {
+        if (userUpdateDTO.phone() != null && !userUpdateDTO.phone().isBlank()) {
             user.setPhone(userUpdateDTO.phone());
         }
-        if (userUpdateDTO.urlImage() != null) {
+        if (userUpdateDTO.urlImage() != null && !userUpdateDTO.urlImage().isBlank()) {
             user.setUrlImage(userUpdateDTO.urlImage());
         }
-        userRepository.save(user);
         return user;
     }
 

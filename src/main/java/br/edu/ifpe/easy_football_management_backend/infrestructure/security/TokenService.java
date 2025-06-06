@@ -9,7 +9,6 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.Console;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -18,8 +17,19 @@ import java.time.ZoneOffset;
 public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
+
+    public static String extract(String token) {
+        try {
+            token = token.replaceFirst("Bearer", "");
+            token = token.trim();
+            return JWT.decode(token).getSubject();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao extrair UUID do token.");
+        }
+    }
+
     public String generateToken(User user) {
-        try{
+        try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("api-local")
@@ -29,7 +39,7 @@ public class TokenService {
                     .withClaim("id", user.getId().toString())
                     .withExpiresAt(generateExpirationDate())
                     .sign(algorithm);
-        }catch (JWTCreationException exception){
+        } catch (JWTCreationException exception) {
             throw new RuntimeException("erro ao autenticar");
         }
     }
@@ -56,17 +66,9 @@ public class TokenService {
         }
     }
 
-    public static String extract(String token) {
-        try {
-            token = token.replaceFirst("Bearer", "");
-            token = token.trim();
-            return JWT.decode(token).getSubject();
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao extrair UUID do token.");
-        }
+    private Instant generateExpirationDate() {
+        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
 
-    private Instant generateExpirationDate(){
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
-    };
+    ;
 }

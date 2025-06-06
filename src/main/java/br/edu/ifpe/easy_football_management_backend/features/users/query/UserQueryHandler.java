@@ -1,12 +1,10 @@
 package br.edu.ifpe.easy_football_management_backend.features.users.query;
 
+import br.edu.ifpe.easy_football_management_backend.domain.entity.User;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.UserRepository;
-import br.edu.ifpe.easy_football_management_backend.features.championshipsteams.ChampionshipsTeamsMapper;
 import br.edu.ifpe.easy_football_management_backend.features.users.UserDTO;
 import br.edu.ifpe.easy_football_management_backend.features.users.UserMapper;
 import br.edu.ifpe.easy_football_management_backend.infrestructure.security.TokenService;
-import br.edu.ifpe.easy_football_management_backend.domain.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,14 +16,14 @@ public class UserQueryHandler {
 
     public final UserRepository userRepository;
     public final TokenService tokenService;
+    private final UserMapper mapper;
 
-    @Autowired
-    private UserMapper mapper;
-
-    public UserQueryHandler(UserRepository userRepository, TokenService tokenService) {
+    public UserQueryHandler(UserRepository userRepository, TokenService tokenService, UserMapper mapper) {
         this.userRepository = userRepository;
         this.tokenService = tokenService;
+        this.mapper = mapper;
     }
+
 
     public List<User> getAll() {
         List<User> users = userRepository.findAll();

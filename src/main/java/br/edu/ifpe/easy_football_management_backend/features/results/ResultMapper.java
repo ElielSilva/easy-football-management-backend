@@ -1,11 +1,9 @@
 package br.edu.ifpe.easy_football_management_backend.features.results;
 
-import br.edu.ifpe.easy_football_management_backend.domain.entity.ChampionshipsTeams;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.Player;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.Statistic;
 
 import java.util.List;
-import java.util.UUID;
 
 public class ResultMapper {
 

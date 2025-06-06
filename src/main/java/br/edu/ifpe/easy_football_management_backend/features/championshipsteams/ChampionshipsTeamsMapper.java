@@ -1,14 +1,13 @@
 package br.edu.ifpe.easy_football_management_backend.features.championshipsteams;
 
 import br.edu.ifpe.easy_football_management_backend.domain.entity.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.mapstruct.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(componentModel = "spring")
 public abstract class ChampionshipsTeamsMapper {
 
-    // TODO: PRINCIPIO DA RESPOSSABILIDADE UNICA
     @Autowired
     protected TeamRepository teamRepository;
 
@@ -26,6 +25,6 @@ public abstract class ChampionshipsTeamsMapper {
 
     public ChampionshipsTeamsDTO toDTO(ChampionshipsTeams entity) {
 
-        return new ChampionshipsTeamsDTO(entity.getTeam().getId(),entity.getChampionships().getId());
+        return new ChampionshipsTeamsDTO(entity.getTeam().getId(), entity.getChampionships().getId());
     }
 }

@@ -21,10 +21,10 @@ public class ChampionshipsTeams {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name="team_id", nullable=false)
+    @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 
     @ManyToOne
-    @JoinColumn(name="championships_id", nullable=false)
+    @JoinColumn(name = "championships_id", nullable = false)
     private Championships championships;
 }

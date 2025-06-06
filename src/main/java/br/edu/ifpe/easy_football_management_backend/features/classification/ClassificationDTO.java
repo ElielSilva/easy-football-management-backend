@@ -5,5 +5,5 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
-public record ClassificationDTO(@NotEmpty  @NotNull UUID championshipId) {
+public record ClassificationDTO(@NotEmpty @NotNull UUID championshipId) {
 }

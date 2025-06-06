@@ -5,6 +5,7 @@ import br.edu.ifpe.easy_football_management_backend.domain.entity.*;
 import br.edu.ifpe.easy_football_management_backend.features.results.ResultDTO;
 import br.edu.ifpe.easy_football_management_backend.features.results.ResultMapper;
 import org.springframework.stereotype.Component;
+
 import java.util.UUID;
 
 
@@ -58,9 +59,9 @@ public class ResultCommandHandler {
     private void updateStandingForTeam(Championships championship, Team team, int goalsFor, int goalsAgainst) {
         Standing standing = standingRepository.findByChampionshipAndTeam(championship, team);
         if (standing == null) {
-           throw new BusinessException("Standing not found");
+            throw new BusinessException("Standing not found");
         }
-        
+
         standing.setChampionship(championship);
         standing.setTeam(team);
         standing.setGoalsFor(standing.getGoalsFor() + goalsFor);

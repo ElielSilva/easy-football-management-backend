@@ -28,5 +28,5 @@ public class ResultController {
     public ResponseEntity<ResultDTO> getResult() {
         return ResponseEntity.status(HttpStatus.OK).body(new ResultDTO());
     }
-    
+
 }

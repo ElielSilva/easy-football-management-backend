@@ -7,7 +7,10 @@ import org.redisson.api.RedissonClient;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 
 @Component
 public class ClassificationHandler {
@@ -26,7 +29,7 @@ public class ClassificationHandler {
 
     @EventListener
     public void GenerateClassificationEvent(ChampionshipsEvent event) {
-        String keyLock = "ClassificationHandler.GenerateClassificationEvent."+ event.getEventId()+"."+event.getChampionshipsId();
+        String keyLock = "ClassificationHandler.GenerateClassificationEvent." + event.getEventId() + "." + event.getChampionshipsId();
         var lock = redissonClient.getLock(keyLock);
         try {
             lock.lock();
@@ -49,7 +52,7 @@ public class ClassificationHandler {
         int teamSize = teams.size();
         var allResults = new HashSet<Result>();
         for (int i = 0; i < teamSize; i++) {
-            for (int j = i + 1; j < teamSize; j++){
+            for (int j = i + 1; j < teamSize; j++) {
                 Team teamHome = teams.get(i);
                 Team teamAway = teams.get(j);
 
@@ -81,38 +84,38 @@ public class ClassificationHandler {
         resultRepository.saveAll(allResults);
     }
 
-   private void generateRoundsCupAndSave(List<Team> teams, Championships championship) {
-       Collections.shuffle(teams);
-       int teamSize = teams.size();
+    private void generateRoundsCupAndSave(List<Team> teams, Championships championship) {
+        Collections.shuffle(teams);
+        int teamSize = teams.size();
 
-       if (teamSize % 2 != 0) {
-           teams.add(null);
-           throw new BusinessException("Cup not supported");
-       }
+        if (teamSize % 2 != 0) {
+            teams.add(null);
+            throw new BusinessException("Cup not supported");
+        }
 
-       for (int i = 0; i < teamSize; i += 2) {
-           Team teamHome = teams.get(i);
-           Team teamAway = teams.get(i + 1);
+        for (int i = 0; i < teamSize; i += 2) {
+            Team teamHome = teams.get(i);
+            Team teamAway = teams.get(i + 1);
 
-           if (teamHome == null && teamAway == null) {
-               throw new BusinessException("Team not supported in team");
-           }
+            if (teamHome == null && teamAway == null) {
+                throw new BusinessException("Team not supported in team");
+            }
 
-           if (teamHome == null || teamAway == null) {
-               throw new BusinessException("Team not supported in team");
-           }
+            if (teamHome == null || teamAway == null) {
+                throw new BusinessException("Team not supported in team");
+            }
 
-           List<Statistic> statistics = new ArrayList<>();
+            List<Statistic> statistics = new ArrayList<>();
 
-           Result result = Result.builder()
-                   .idHomeTeam(teamHome.getId())
-                   .homeTeamGoals(0)
-                   .idAwayTeam(teamAway.getId())
-                   .awayTeamGoals(0)
-                   .championship(championship)
-                   .statistics(statistics)
-                   .build();
-           resultRepository.save(result);
-       }
-   }
+            Result result = Result.builder()
+                    .idHomeTeam(teamHome.getId())
+                    .homeTeamGoals(0)
+                    .idAwayTeam(teamAway.getId())
+                    .awayTeamGoals(0)
+                    .championship(championship)
+                    .statistics(statistics)
+                    .build();
+            resultRepository.save(result);
+        }
+    }
 }

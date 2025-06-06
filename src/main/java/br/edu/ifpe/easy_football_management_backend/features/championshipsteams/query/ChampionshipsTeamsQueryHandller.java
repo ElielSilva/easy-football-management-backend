@@ -4,11 +4,9 @@ import br.edu.ifpe.easy_football_management_backend.application.commom.exception
 import br.edu.ifpe.easy_football_management_backend.domain.entity.ChampionshipsTeams;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.ChampionshipsTeamsRepository;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.TeamRepository;
-import br.edu.ifpe.easy_football_management_backend.features.championshipsteams.ChampionshipsTeamsDTO;
 import br.edu.ifpe.easy_football_management_backend.infrestructure.security.TokenService;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 

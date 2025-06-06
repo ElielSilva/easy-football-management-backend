@@ -17,6 +17,7 @@ public class TeamQueryHandler {
     public TeamQueryHandler(TeamRepository teamRepository) {
         this.teamRepository = teamRepository;
     }
+
     /**
      * Retrieves all teams from the repository.
      *
@@ -26,6 +27,7 @@ public class TeamQueryHandler {
     public List<Team> handler() {
         return teamRepository.findAll();
     }
+
     /**
      * Retrieves all teams from the repository.
      *

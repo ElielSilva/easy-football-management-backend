@@ -2,7 +2,6 @@
 
 ## Padrão vertical slice com Mediator
 
-
 ```📦 com.seuprojeto
  ┣ 📂 application
  ┃ ┣ 📂 common

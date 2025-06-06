@@ -34,19 +34,19 @@ public class TeamsController {
     }
 
     @GetMapping("/{teamId}")
-    public ResponseEntity<Optional<Team>> get(@PathVariable  UUID teamId) {
+    public ResponseEntity<Optional<Team>> get(@PathVariable UUID teamId) {
         var result = teamQueryHandler.handler(teamId);
         return ResponseEntity.ok(result);
     }
 
     @PutMapping("/{teamId}")
-    public ResponseEntity<Team> update(@PathVariable  UUID teamId, @RequestBody TeamDTO team, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<Team> update(@PathVariable UUID teamId, @RequestBody TeamDTO team, @RequestHeader("Authorization") String token) {
         var payload = new TeamDTO(team.name(), team.img(), UUID.fromString(TokenService.extract(token)));
         return ResponseEntity.ok(teamCommandHandler.handler(payload, teamId));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable  UUID teamId) {
+    public ResponseEntity<String> delete(@PathVariable UUID teamId) {
         teamCommandHandler.handler(teamId);
         return ResponseEntity.ok("sucesso");
     }

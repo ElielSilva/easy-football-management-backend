@@ -1,38 +1,39 @@
 package br.edu.ifpe.easy_football_management_backend.features.players;
 
 import br.edu.ifpe.easy_football_management_backend.domain.entity.Player;
-import br.edu.ifpe.easy_football_management_backend.domain.entity.PlayerRepository;
+import br.edu.ifpe.easy_football_management_backend.domain.entity.Team;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.TeamRepository;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
-public class PlayerMapper {
+import java.util.UUID;
 
-    // TODO: SEGREGAR OQ E MAPPER DO ACESSO A BASE
-    private final PlayerRepository playerRepository;
-    private final TeamRepository teamRepository;
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public abstract class PlayerMapper {
 
     @Autowired
-    public PlayerMapper(PlayerRepository playerRepository, TeamRepository teamRepository) {
-        this.playerRepository = playerRepository;
-        this.teamRepository = teamRepository;
+    protected TeamRepository teamRepository;
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "team", expression = "java(findTeamById(dto.teamId()))")
+    public abstract Player toEntity(PlayerDTO dto);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "team", expression = "java(findTeamById(dto.teamId()))")
+    public abstract void updatePlayerFromDto(PlayerDTO dto, @MappingTarget Player player);
+
+    protected Team findTeamById(UUID teamId) {
+        if (teamId == null) {
+            return null;
+        }
+
+        return teamRepository.findById(teamId)
+                .orElseThrow(() -> new RuntimeException("Team with ID " + teamId + " not found."));
     }
 
-    public Player toEntity(PlayerDTO dto) {
-        return Player.builder()
-                .name(dto.name())
-                .position(dto.position())
-                .number(dto.number())
-                .build();
-    }
-
-    public PlayerDTO toDTO(Player entity) {
-        return new PlayerDTO(
-                entity.getName(),
-                entity.getPosition(),
-                entity.getNumber(),
-                entity.getTeam().getId()
-        );
-    }
+    @Mapping(source = "team.id", target = "teamId")
+    public abstract PlayerDTO toDto(Player player);
 }

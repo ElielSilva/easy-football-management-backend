@@ -4,8 +4,6 @@ import br.edu.ifpe.easy_football_management_backend.domain.entity.User;
 import br.edu.ifpe.easy_football_management_backend.features.users.command.UserCommandHandler;
 import br.edu.ifpe.easy_football_management_backend.features.users.query.UserQueryHandler;
 import br.edu.ifpe.easy_football_management_backend.infrestructure.service.FileStorageService;
-import br.edu.ifpe.easy_football_management_backend.features.users.UserDTO;
-import br.edu.ifpe.easy_football_management_backend.features.users.UserUpdateDTO;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -38,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<User> > getAll() {
+    public ResponseEntity<List<User>> getAll() {
         List<User> users = userQueryHandler.getAll();
         return ResponseEntity.ok(users);
     }
@@ -59,7 +56,7 @@ public class UserController {
     }
 
     @DeleteMapping("")
-    public ResponseEntity<String> deleteUser (@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<String> deleteUser(@RequestHeader("Authorization") String authHeader) {
         userCommandHandler.deleteteUsers(authHeader);
         return ResponseEntity.ok("sucesso");
     }

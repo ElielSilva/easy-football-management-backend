@@ -4,7 +4,10 @@ import br.edu.ifpe.easy_football_management_backend.features.auth.command.Regist
 import br.edu.ifpe.easy_football_management_backend.features.auth.query.LoginUserQueryHandler;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")

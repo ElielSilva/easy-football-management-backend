@@ -1,10 +1,8 @@
 package br.edu.ifpe.easy_football_management_backend.features.championships;
 
 import br.edu.ifpe.easy_football_management_backend.domain.entity.Championships;
-import br.edu.ifpe.easy_football_management_backend.domain.entity.Team;
 import br.edu.ifpe.easy_football_management_backend.features.championships.command.ChampionshipsCommandHandler;
 import br.edu.ifpe.easy_football_management_backend.features.championships.query.ChampionshipsQueryHandler;
-import br.edu.ifpe.easy_football_management_backend.features.teams.TeamDTO;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

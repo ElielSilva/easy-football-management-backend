@@ -1,7 +1,6 @@
 package br.edu.ifpe.easy_football_management_backend.infrestructure.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -23,10 +22,9 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfigurations {
 
     @Autowired
-    private CustomUserDetailsService userDetailsService;
-
-    @Autowired
     SecurityFilter securityFilter;
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -39,7 +37,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/teams").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/player").permitAll()
-                        .requestMatchers("/swagger-ui.html", "/graphql","/graphql/**", "/static/**","swagger-ui/**","/v3/api-docs", "/v3/api-docs/**", "/api-docs","/error").permitAll()
+                        .requestMatchers("/swagger-ui.html", "/graphql", "/graphql/**", "/static/**", "swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**", "/api-docs", "/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);

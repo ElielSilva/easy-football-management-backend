@@ -9,7 +9,6 @@ import br.edu.ifpe.easy_football_management_backend.features.players.PlayerMappe
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.UUID;
 
 //@Component
@@ -18,13 +17,16 @@ public class PlayerCommandHandler {
     private final PlayerRepository playerRepository;
     private final TeamRepository teamRepository;
 
-    @Autowired
-    private PlayerMapper mapper;
+    private final PlayerMapper mapper;
 
     @Autowired
-    public PlayerCommandHandler(PlayerRepository playerRepository, TeamRepository teamRepository) {
+    public PlayerCommandHandler(
+            PlayerRepository playerRepository,
+            TeamRepository teamRepository,
+            PlayerMapper mapper) {
         this.playerRepository = playerRepository;
         this.teamRepository = teamRepository;
+        this.mapper = mapper;
     }
 
     public Player create(PlayerDTO playerDTO, UUID userId) {

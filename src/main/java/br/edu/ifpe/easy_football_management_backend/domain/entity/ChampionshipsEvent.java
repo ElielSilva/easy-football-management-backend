@@ -1,6 +1,5 @@
 package br.edu.ifpe.easy_football_management_backend.domain.entity;
 
-import java.util.List;
 import java.util.UUID;
 
 public class ChampionshipsEvent {
