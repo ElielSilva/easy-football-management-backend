@@ -1,5 +1,6 @@
 package br.edu.ifpe.easy_football_management_backend.features.players.command;
 
+import br.edu.ifpe.easy_football_management_backend.application.commom.exceptions.NotFoundException;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.Player;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.PlayerRepository;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.Team;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-//@Component
 @Service
 public class PlayerCommandHandler {
     private final PlayerRepository playerRepository;
@@ -32,9 +32,7 @@ public class PlayerCommandHandler {
     public Player create(PlayerDTO playerDTO, UUID userId) {
         System.out.println(userId);
         Team team = teamRepository.findFirstClassTeamIdByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Time não encontrado"));
-        System.out.println(team.getName());
-        System.out.println("teste");
+                .orElseThrow(() -> new NotFoundException("Team not found for user ID: " + userId));
         Player player = mapper.toEntity(playerDTO);
         player.setTeam(team);
 
@@ -44,12 +42,12 @@ public class PlayerCommandHandler {
     public Player update(PlayerDTO playerDTO, UUID playerId) {
 
         Player existingPlayer = playerRepository.findById(playerId)
-                .orElseThrow(() -> new RuntimeException("Jogador não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Player not found with ID: " + playerId));
         existingPlayer.setName(playerDTO.name());
         existingPlayer.setPosition(playerDTO.position());
         existingPlayer.setNumber(playerDTO.number());
         Team team = teamRepository.findById(playerDTO.teamId())
-                .orElseThrow(() -> new RuntimeException("Time não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Team not found with ID: " + playerDTO.teamId()));
 
         existingPlayer.setTeam(team);
 

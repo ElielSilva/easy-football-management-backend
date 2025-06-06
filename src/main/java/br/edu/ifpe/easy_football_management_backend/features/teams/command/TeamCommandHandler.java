@@ -1,5 +1,6 @@
 package br.edu.ifpe.easy_football_management_backend.features.teams.command;
 
+import br.edu.ifpe.easy_football_management_backend.application.commom.exceptions.NotFoundException;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.Team;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.TeamRepository;
 import br.edu.ifpe.easy_football_management_backend.features.teams.TeamDTO;
@@ -28,7 +29,7 @@ public class TeamCommandHandler {
     public Team handler(TeamDTO team, UUID teamId) {
         if (teamId != null) {
             if (isNotExist(teamId)) {
-                throw new IllegalArgumentException("Team ID " + teamId + " does not exist");
+                throw new NotFoundException("Team ID " + teamId + " does not exist");
             }
         }
         Team teamEntity = teamMapper.toEntity(team);
@@ -41,7 +42,7 @@ public class TeamCommandHandler {
     public void handler(UUID teamId) {
         if (teamId != null) {
             if (isNotExist(teamId)) {
-                throw new IllegalArgumentException("Team ID " + teamId + " does not exist");
+                throw new NotFoundException("Team ID " + teamId + " does not exist");
             }
             teamRepository.deleteById(teamId);
         }

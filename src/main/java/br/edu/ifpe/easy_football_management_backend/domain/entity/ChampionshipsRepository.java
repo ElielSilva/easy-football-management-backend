@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface ChampionshipsRepository extends JpaRepository<Championships, UUID> {
     @Query("SELECT t FROM Championships c JOIN ChampionshipsTeams ct ON c.id = ct.championships.id JOIN Team t ON t.id = ct.team.id WHERE ct.championships = :championship")
     List<Team> findByChampionshipsContaining(Championships championship);
+
+    List<Championships> findAllByUserId(UUID uuid);
 }

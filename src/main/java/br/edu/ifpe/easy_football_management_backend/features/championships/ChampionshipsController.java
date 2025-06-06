@@ -26,9 +26,15 @@ public class ChampionshipsController {
         this.championshipsCommandHandler = championshipsCommandHandler;
     }
 
-    @GetMapping("")
+    @GetMapping("/all")
     public ResponseEntity<List<Championships>> getAll() {
         var result = championshipsQueryHandler.handler();
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<Championships>> get(@RequestHeader ("Authorization") String authorization) {
+        var result = championshipsQueryHandler.handler(authorization);
         return ResponseEntity.ok(result);
     }
 

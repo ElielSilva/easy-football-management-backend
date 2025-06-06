@@ -1,6 +1,7 @@
 package br.edu.ifpe.easy_football_management_backend.features.classification.command;
 
 import br.edu.ifpe.easy_football_management_backend.application.commom.exceptions.BusinessException;
+import br.edu.ifpe.easy_football_management_backend.application.commom.exceptions.NotFoundException;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.*;
 import org.apache.coyote.BadRequestException;
 import org.redisson.api.RedissonClient;
@@ -29,20 +30,18 @@ public class ClassificationHandler {
 
     @EventListener
     public void GenerateClassificationEvent(ChampionshipsEvent event) {
-        String keyLock = "ClassificationHandler.GenerateClassificationEvent." + event.getEventId() + "." + event.getChampionshipsId();
+        String keyLock = "ClassificationHandler.GenerateClassificationEvent.";
         var lock = redissonClient.getLock(keyLock);
         try {
             lock.lock();
             var championships = championshipsRepository.findById(event.getChampionshipsId())
-                    .orElseThrow(() -> new BadRequestException("Championship not found"));
+                    .orElseThrow(() -> new NotFoundException("Championship not found"));
             var teams = championshipsRepository.findByChampionshipsContaining(championships);
             if (championships.getType().equals(TypeChampionship.CUP)) {
                 generateRoundsCupAndSave(teams, championships);
             } else {
                 generateRoundsLeagueAndSave(teams, championships);
             }
-        } catch (BadRequestException e) {
-            throw new RuntimeException(e);
         } finally {
             lock.unlock();
         }

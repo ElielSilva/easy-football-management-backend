@@ -1,6 +1,7 @@
 package br.edu.ifpe.easy_football_management_backend.features.results.commands;
 
 import br.edu.ifpe.easy_football_management_backend.application.commom.exceptions.BusinessException;
+import br.edu.ifpe.easy_football_management_backend.application.commom.exceptions.NotFoundException;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.*;
 import br.edu.ifpe.easy_football_management_backend.features.results.ResultDTO;
 import br.edu.ifpe.easy_football_management_backend.features.results.ResultMapper;
@@ -33,7 +34,7 @@ public class ResultCommandHandler {
         var statisticList = ResultMapper.mapToResult(result);
 
         if (resultEntity.isEmpty())
-            throw new BusinessException("Result not found");
+            throw new NotFoundException("Result not found");
 
         resultEntity.get().setStatus(STATUS.IN_PROGRESS);
         resultEntity.get().setStatistics(statisticList);
@@ -45,9 +46,9 @@ public class ResultCommandHandler {
 
     private void updateStandings(Result result) {
         var home = teamRepository.findById(result.getIdHomeTeam())
-                .orElseThrow(() -> new BusinessException("Home team not found"));
+                .orElseThrow(() -> new NotFoundException("Home team not found"));
         Team away = teamRepository.findById(result.getIdAwayTeam())
-                .orElseThrow(() -> new BusinessException("Home team not found"));
+                .orElseThrow(() -> new NotFoundException("Home team not found"));
         int homeGoals = result.getHomeTeamGoals();
         int awayGoals = result.getAwayTeamGoals();
         Championships championship = result.getChampionship();
@@ -59,7 +60,7 @@ public class ResultCommandHandler {
     private void updateStandingForTeam(Championships championship, Team team, int goalsFor, int goalsAgainst) {
         Standing standing = standingRepository.findByChampionshipAndTeam(championship, team);
         if (standing == null) {
-            throw new BusinessException("Standing not found");
+            throw new NotFoundException("Standing not found");
         }
 
         standing.setChampionship(championship);

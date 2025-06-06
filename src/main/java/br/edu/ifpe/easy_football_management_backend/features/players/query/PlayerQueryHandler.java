@@ -25,5 +25,4 @@ public class PlayerQueryHandler {
         return playerRepository.getAllPlayersForTeamId(TeamId);
     }
 
-
 }
