@@ -39,5 +39,6 @@ public class User {
 
     @OneToOne(mappedBy = "user")
     @JsonBackReference
+    @ToString.Exclude
     private Team team;
 }

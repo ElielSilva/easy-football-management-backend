@@ -28,13 +28,13 @@ public class TeamsController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Team>> getAll() {
+    public ResponseEntity<List<TeamDtoResponse>> getAll() {
         var result = teamQueryHandler.handler();
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{teamId}")
-    public ResponseEntity<Optional<Team>> get(@PathVariable UUID teamId) {
+    public ResponseEntity<Optional<TeamDtoResponse>> get(@PathVariable UUID teamId) {
         var result = teamQueryHandler.handler(teamId);
         return ResponseEntity.ok(result);
     }

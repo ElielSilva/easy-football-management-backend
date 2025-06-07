@@ -40,11 +40,9 @@ public class PlayerController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Player>> get() {
-//        System.out.println(teamId);
-        List<Player> players = playerQueryHandler.getAll();
+    public ResponseEntity<List<PlayerDtoResponse>> get() {
+        var players = playerQueryHandler.getAll();
         return ResponseEntity.ok(players);
-//        return ResponseEntity.ok("players");
     }
 
     @PutMapping("{playerId}")

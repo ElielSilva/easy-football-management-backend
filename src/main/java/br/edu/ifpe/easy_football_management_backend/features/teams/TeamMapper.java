@@ -40,4 +40,16 @@ public abstract class TeamMapper {
     @Mapping(source = "urlImage", target = "img")
     @Mapping(source = "user.id", target = "userID")
     public abstract TeamDTO toDto(Team team);
+
+    // Mapping de Entity para DTO
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "urlImage", source = "urlImage")
+    public abstract TeamDtoResponse toDtoResponse(Team team);
+
+    // Opcional: Mapping de DTO para Entity
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "urlImage", source = "urlImage")
+    public abstract Team toEntity(TeamDtoResponse teamDtoResponse);
 }

@@ -36,4 +36,19 @@ public abstract class PlayerMapper {
 
     @Mapping(source = "team.id", target = "teamId")
     public abstract PlayerDTO toDto(Player player);
+
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "position", source = "position")
+    @Mapping(target = "number", source = "number")
+    @Mapping(target = "team", source = "team") // MapStruct vai usar o TeamMapper para este campo
+    public abstract PlayerDtoResponse toDtoResponse(Player player);
+
+    // Opcional: Mapping de DTO para Entity
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "position", source = "position")
+    @Mapping(target = "number", source = "number")
+    @Mapping(target = "team", source = "team")
+    public abstract Player toEntity(PlayerDtoResponse playerDtoResponse);
 }

@@ -1,27 +1,49 @@
 package br.edu.ifpe.easy_football_management_backend.features.results;
 
 import br.edu.ifpe.easy_football_management_backend.domain.entity.Player;
+import br.edu.ifpe.easy_football_management_backend.domain.entity.Result;
+import br.edu.ifpe.easy_football_management_backend.domain.entity.STATUS;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.Statistic;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class ResultMapper {
 
-    public static List<Statistic> mapToResult(ResultDTO result) {
-        return result.playersResults.stream().map(x ->
-                Statistic
-                        .builder()
-                        .player(
-                                Player
-                                        .builder()
-                                        .id(x.playerId)
-                                        .build())
-                        .goals(x.goals)
-                        .redCards(x.redCards)
-                        .yellowCards(x.yellowCards)
-                        .goalAgainst(x.goalAgainst)
-                        .participations(x.participations)
+    public static List<Statistic> mapToStatistics(ResultDTO resultDto, Result resultEntity) {
+        return resultDto.playersResults.stream().map(playerResultDto ->
+                Statistic.builder()
+                        .id(UUID.randomUUID()) // Gera um novo UUID para a estatística
+                        .player(Player.builder().id(playerResultDto.playerId).build())
+                        .goals(playerResultDto.goals)
+                        .redCards(playerResultDto.redCards)
+                        .yellowCards(playerResultDto.yellowCards)
+                        .goalAgainst(playerResultDto.goalAgainst)
+                        .participations(playerResultDto.participations)
+                        .result(resultEntity) // Associa a estatística ao resultado
                         .build()
-        ).toList();
+        ).collect(Collectors.toList());
+    }
+
+    public static Result mapToNewResult(ResultDTO resultDto) {
+        return Result.builder()
+                .idHomeTeam(resultDto.idHomeTeam)
+                .homeTeamGoals(resultDto.homeTeamGoals)
+                .idAwayTeam(resultDto.idAwayTeam)
+                .awayTeamGoals(resultDto.awayTeamGoals)
+                .status(STATUS.FINISHED)
+                .build();
+    }
+
+    public static ResultDTO mapToResultDTO(Result resultEntity) {
+        ResultDTO dto = new ResultDTO();
+        dto.resultId = resultEntity.getId();
+        dto.idHomeTeam = resultEntity.getIdHomeTeam();
+        dto.homeTeamGoals = resultEntity.getHomeTeamGoals();
+        dto.idAwayTeam = resultEntity.getIdAwayTeam();
+        dto.awayTeamGoals = resultEntity.getAwayTeamGoals();
+        dto.championshipId = resultEntity.getChampionship() != null ? resultEntity.getChampionship().getId() : null;
+        return dto;
     }
 }

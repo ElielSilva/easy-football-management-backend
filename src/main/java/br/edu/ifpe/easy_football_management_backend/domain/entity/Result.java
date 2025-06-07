@@ -31,7 +31,7 @@ public class Result {
     @JoinColumn(name = "chamspionships_id")
     private Championships championship;
 
-    @OneToMany(mappedBy = "result")
+    @OneToMany(mappedBy = "result", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Statistic> statistics;
 
     @Override
