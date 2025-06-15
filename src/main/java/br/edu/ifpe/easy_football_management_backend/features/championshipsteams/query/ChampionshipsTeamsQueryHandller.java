@@ -33,7 +33,7 @@ public class ChampionshipsTeamsQueryHandller {
 
         UUID userTeamId = optionalTeamId.get();
 
-        Optional<ChampionshipsTeams> ChampionshipsTeams = championshipsTeamsRepository.findByChampionships_IdAndTeam_Id(championshipId, teamId);
+        Optional<ChampionshipsTeams> ChampionshipsTeams = championshipsTeamsRepository.findByChampionship_IdAndTeam_Id(championshipId, teamId);
 
         if (ChampionshipsTeams.isEmpty()) {
             throw new BusinessException("Team does not belong to this championship");

@@ -18,13 +18,13 @@ public abstract class ChampionshipsTeamsMapper {
         ChampionshipsTeams entity = new ChampionshipsTeams();
         entity.setTeam(team);
 
-        entity.setChampionships(championships);
+        entity.setChampionship(championships);
 
         return entity;
     }
 
     public ChampionshipsTeamsDTO toDTO(ChampionshipsTeams entity) {
 
-        return new ChampionshipsTeamsDTO(entity.getTeam().getId(), entity.getChampionships().getId());
+        return new ChampionshipsTeamsDTO(entity.getTeam().getId(), entity.getChampionship().getId());
     }
 }

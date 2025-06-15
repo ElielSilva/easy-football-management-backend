@@ -1,5 +1,6 @@
 package br.edu.ifpe.easy_football_management_backend.features.players;
 
+import br.edu.ifpe.easy_football_management_backend.domain.entity.PlayerPosition;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -12,7 +13,7 @@ public record PlayerDTO(
         String name,
 
         @NotBlank(message = "Posição é obrigatória")
-        String position,
+        PlayerPosition position,
 
         @NotNull(message = "Número é obrigatório")
         @Min(value = 1, message = "Número deve ser maior que zero")

@@ -4,10 +4,7 @@ package br.edu.ifpe.easy_football_management_backend.features.championships;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.Championships;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.User;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.UserRepository;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.UUID;
@@ -25,22 +22,34 @@ public abstract class ChampionshipsMapper {
     public abstract ChampionshipsDTO toDto(Championships championships);
 
 
+
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(source = "typeChampionship", target = "type")
-    @Mapping(source = "statusChampionship", target = "status")
-    @Mapping(target = "user", expression = "java(findUserById(dto.userID()))")
-    @Mapping(target = "description", source = "description", nullValuePropertyMappingStrategy = org.mapstruct.NullValuePropertyMappingStrategy.SET_TO_NULL)
+    @Mapping(target = "type", source = "typeChampionship")
+    @Mapping(target = "status", source = "statusChampionship")
+    @Mapping(target = "registeredTeams", ignore = true)
+    @Mapping(target = "results", ignore = true)
+    @Mapping(target = "startDate", ignore = true)
+    @Mapping(target = "endDate", ignore = true)
+    @Mapping(target = "user", source = "userID", qualifiedByName = "mapUserIdToUser")
     public abstract Championships toEntity(ChampionshipsDTO dto);
 
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
     @Mapping(source = "typeChampionship", target = "type")
     @Mapping(source = "statusChampionship", target = "status")
     @Mapping(target = "user", expression = "java(findUserById(dto.userID()))")
     @Mapping(target = "description", source = "description", nullValuePropertyMappingStrategy = org.mapstruct.NullValuePropertyMappingStrategy.SET_TO_NULL)
     public abstract void updateChampionshipsFromDto(ChampionshipsDTO dto, @MappingTarget Championships championships);
+
+
+    @Named("mapUserIdToUser")
+    protected User mapUserIdToUser(UUID userId) {
+        if (userId == null) {
+            return null;
+        }
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID: " + userId));
+    }
 
 
     protected User findUserById(UUID userId) {

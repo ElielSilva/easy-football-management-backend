@@ -14,14 +14,11 @@ public class ResultMapper {
     public static List<Statistic> mapToStatistics(ResultDTO resultDto, Result resultEntity) {
         return resultDto.playersResults.stream().map(playerResultDto ->
                 Statistic.builder()
-                        .id(UUID.randomUUID()) // Gera um novo UUID para a estatística
+                        .id(UUID.randomUUID())
                         .player(Player.builder().id(playerResultDto.playerId).build())
                         .goals(playerResultDto.goals)
                         .redCards(playerResultDto.redCards)
                         .yellowCards(playerResultDto.yellowCards)
-                        .goalAgainst(playerResultDto.goalAgainst)
-                        .participations(playerResultDto.participations)
-                        .result(resultEntity) // Associa a estatística ao resultado
                         .build()
         ).collect(Collectors.toList());
     }

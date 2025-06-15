@@ -1,50 +1,51 @@
 package br.edu.ifpe.easy_football_management_backend.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "standings")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Standing {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "championship_id")
-    private Championships championship;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "championship_id", nullable = false)
+    private Championships championship; // Renomeado para Championship
 
-    @ManyToOne
-    @JoinColumn(name = "team_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 
-    private int points;
-    private int wins;
-    private int draws;
-    private int losses;
-    private int goalsFor;
-    private int goalsAgainst;
-    private int goalDifference;
+    @Column(nullable = false)
+    private int points = 0;
+    @Column(nullable = false)
+    private int wins = 0;
+    @Column(nullable = false)
+    private int draws = 0;
+    @Column(nullable = false)
+    private int losses = 0;
+    @Column(name = "goals_for", nullable = false)
+    private int goalsFor = 0;
+    @Column(name = "goals_against", nullable = false)
+    private int goalsAgainst = 0;
+    @Column(name = "goal_difference", nullable = false)
+    private int goalDifference = 0;
 
-    public UUID getId() { return id; }
-    public void setId(UUID id) { this.id = id; }
-    public Championships getChampionship() { return championship; }
-    public void setChampionship(Championships championship) { this.championship = championship; }
-    public int getPoints() { return points; }
-    public void setPoints(int points) { this.points = points; }
-    public Team getTeam() { return team; }
-    public void setTeam(Team team) { this.team = team; }
-    public int getWins() { return wins; }
-    public void setWins(int wins) { this.wins = wins; }
-    public int getDraws() { return draws; }
-    public void setDraws(int draws) { this.draws = draws; }
-    public int getLosses() { return losses; }
-    public void setLosses(int losses) { this.losses = losses; }
-    public int getGoalsFor() { return goalsFor; }
-    public void setGoalsFor(int goalsFor) { this.goalsFor = goalsFor; }
-    public int getGoalsAgainst() { return goalsAgainst; }
-    public void setGoalsAgainst(int goalsAgainst) { this.goalsAgainst = goalsAgainst; }
-    public int getGoalDifference() { return goalDifference; }
-    public void setGoalDifference(int goalDifference) { this.goalDifference = goalDifference; }
+    @Column(name = "games_played", nullable = false)
+    private int gamesPlayed = 0;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt = LocalDateTime.now();
 }

@@ -2,6 +2,7 @@ package br.edu.ifpe.easy_football_management_backend.domain.entity;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -9,8 +10,14 @@ import java.util.UUID;
 
 @Repository
 public interface ChampionshipsRepository extends JpaRepository<Championships, UUID> {
-    @Query("SELECT t FROM Championships c JOIN ChampionshipsTeams ct ON c.id = ct.championships.id JOIN Team t ON t.id = ct.team.id WHERE ct.championships = :championship")
+    @Query("SELECT t FROM Championships c JOIN ChampionshipsTeams ct ON c.id = ct.championship.id JOIN Team t ON t.id = ct.team.id WHERE ct.championship = :championship")
     List<Team> findByChampionshipsContaining(Championships championship);
+
+    @Query("SELECT c FROM Championships c JOIN c.registeredTeams ct WHERE ct.team = :team")
+    List<Championships> findChampionshipsRegisteredByTeam(@Param("team") Team team);
+
+    @Query("SELECT c FROM Championships c JOIN ChampionshipsTeams ct ON c.id = ct.championship.id WHERE ct.team = :team")
+    List<Championships> findChampionshipsByTeam(@Param("team") Team team);
 
     List<Championships> findAllByUserId(UUID uuid);
 }

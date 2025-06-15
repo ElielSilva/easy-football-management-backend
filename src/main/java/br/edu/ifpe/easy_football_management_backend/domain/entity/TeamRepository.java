@@ -19,7 +19,7 @@ public interface TeamRepository extends JpaRepository<Team, UUID> {
 
     Team findByUser(User user);
 
-    @Query("SELECT c FROM Championships c JOIN ChampionshipsTeams ct ON c.id = ct.championships.id WHERE ct.team = :team")
+    @Query("SELECT c FROM Championships c JOIN ChampionshipsTeams ct ON c.id = ct.championship.id WHERE ct.team = :team")
     List<Championships> findByTeamsContaining(Team team);
 
 //    @Query("SELECT t FROM Team t WHERE t.user.id = :userId")

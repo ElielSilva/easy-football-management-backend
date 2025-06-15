@@ -27,7 +27,6 @@ public class PlayerController {
     @PostMapping("")
     public ResponseEntity<Player> create(@RequestBody @Valid PlayerDTO playerDTO, @RequestHeader("Authorization") String token) {
         var userId = UUID.fromString(TokenService.extract(token));
-        System.out.println("teste");
         var player = playerCommandHandler.create(playerDTO, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(player);
     }

@@ -1,8 +1,8 @@
 package br.edu.ifpe.easy_football_management_backend.features.classification.query;
 
+import br.edu.ifpe.easy_football_management_backend.domain.entity.Match;
+import br.edu.ifpe.easy_football_management_backend.domain.entity.MatchRepository;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.Matchs;
-import br.edu.ifpe.easy_football_management_backend.domain.entity.Result;
-import br.edu.ifpe.easy_football_management_backend.domain.entity.ResultRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,9 +12,9 @@ import java.util.UUID;
 @Component
 public class ClassificationQueryHandler {
 
-    private final ResultRepository resultRepository;
+    private final MatchRepository resultRepository;
 
-    public ClassificationQueryHandler(ResultRepository resultRepository) {
+    public ClassificationQueryHandler(MatchRepository resultRepository) {
         this.resultRepository = resultRepository;
     }
 
@@ -22,7 +22,7 @@ public class ClassificationQueryHandler {
         var results = resultRepository.findByChampionshipId(id);
 
         long teamsCount = results.stream()
-                .flatMap(r -> List.of(r.getIdHomeTeam(), r.getIdAwayTeam()).stream())
+                .flatMap(r -> List.of(r.getHomeTeam().getId(), r.getAwayTeam().getId()).stream())
                 .distinct()
                 .count();
 
@@ -36,7 +36,7 @@ public class ClassificationQueryHandler {
             int endIndex = Math.min(startIndex + gamesPerRound, results.size());
 
             if (startIndex < results.size()) {
-                List<Result> roundGames = new ArrayList<>(
+                List<Match> roundGames = new ArrayList<>(
                         results.subList(startIndex, endIndex)
                 );
 
@@ -48,7 +48,7 @@ public class ClassificationQueryHandler {
         return rounds;
     }
 
-    public List<Result> handler(UUID id) {
+    public List<Match> handler(UUID id) {
         var results = resultRepository.findByChampionshipId(id);
 
         return results;

@@ -1,7 +1,7 @@
 package br.edu.ifpe.easy_football_management_backend.features.classification;
 
+import br.edu.ifpe.easy_football_management_backend.domain.entity.Match;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.Matchs;
-import br.edu.ifpe.easy_football_management_backend.domain.entity.Result;
 import br.edu.ifpe.easy_football_management_backend.features.classification.query.ClassificationQueryHandler;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -32,7 +32,7 @@ public class ClassificationController {
     }
 
     @GetMapping("/{Championships}")
-    public ResponseEntity<List<Result>> FindByIdClassification(@RequestParam("Championships") @NotNull @Valid UUID championshipId) {
+    public ResponseEntity<List<Match>> FindByIdClassification(@RequestParam("Championships") @NotNull @Valid UUID championshipId) {
         return ResponseEntity.ok(classificationQueryHandler.handler(championshipId));
     }
 }

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -24,7 +25,10 @@ public class ChampionshipsTeams {
     @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "championships_id", nullable = false)
-    private Championships championships;
+    private Championships championship;
+
+    @Column(name = "registration_date", nullable = false)
+    private LocalDateTime registrationDate = LocalDateTime.now();
 }

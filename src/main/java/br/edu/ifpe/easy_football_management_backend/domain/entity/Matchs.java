@@ -13,5 +13,5 @@ import java.util.List;
 @Setter
 public class Matchs {
     private Integer round;
-    private List<Result> games;
+    private List<Match> games;
 }

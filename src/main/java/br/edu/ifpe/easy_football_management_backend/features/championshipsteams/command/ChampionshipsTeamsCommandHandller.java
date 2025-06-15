@@ -59,7 +59,7 @@ public class ChampionshipsTeamsCommandHandller {
             throw new BusinessException("Team does not belong to the user");
         }
         Integer countTeamInChampionship = championshipsTeamsRepository.countByTeamContains(championshipsTeamsDTO.championshipsId());
-        if (championshipsTeamsRepository.existsByTeamId(championshipsTeamsDTO.teamId())) {
+        if (championshipsTeamsRepository.existsTeam(championshipsTeamsDTO.championshipsId(),championshipsTeamsDTO.teamId())) {
             throw new BusinessException("Team already exists");
         }
         if (countTeamInChampionship >= championships.getQuantityTeams()) {
@@ -85,7 +85,7 @@ public class ChampionshipsTeamsCommandHandller {
         lock.lock();
         Integer countTeamInChampionship = championshipsTeamsRepository.countByTeamContains(ChampionshipsId);
         var championship = championshipsRepository.findById(ChampionshipsId).orElseThrow(() -> new NotFoundException("Championship not found"));
-        boolean isExist = championshipsTeamsRepository.existsByTeamId(teamId);
+        boolean isExist = championshipsTeamsRepository.existsTeam(teamId, ChampionshipsId);
         if (countTeamInChampionship.equals(0)) {
             throw new BusinessException("Championship does not have any teams");
         }

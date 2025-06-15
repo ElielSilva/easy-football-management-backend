@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -24,12 +25,19 @@ public class Player {
     private String name;
 
     @Column(nullable = false)
-    private String position;
+    @Enumerated(EnumType.STRING)
+    private PlayerPosition position;
 
     @Column(nullable = false)
     private Integer number;
 
-    @ManyToOne
-    @JoinColumn(name = "teams_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id", nullable = false)
     private Team team;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }
