@@ -10,6 +10,7 @@ import br.edu.ifpe.easy_football_management_backend.features.players.PlayerMappe
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -34,6 +35,7 @@ public class PlayerCommandHandler {
         Team team = teamRepository.findFirstClassTeamIdByUserId(userId)
                 .orElseThrow(() -> new NotFoundException("Team not found for user ID: " + userId));
         Player player = mapper.toEntity(playerDTO);
+        player.setCreatedAt(LocalDateTime.now());
         player.setTeam(team);
 
         return playerRepository.save(player);

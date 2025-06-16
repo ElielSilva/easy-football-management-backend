@@ -12,7 +12,7 @@ public record PlayerDTO(
         @NotBlank(message = "Nome é obrigatório")
         String name,
 
-        @NotBlank(message = "Posição é obrigatória")
+        @NotNull(message = "Posição é obrigatória")
         PlayerPosition position,
 
         @NotNull(message = "Número é obrigatório")

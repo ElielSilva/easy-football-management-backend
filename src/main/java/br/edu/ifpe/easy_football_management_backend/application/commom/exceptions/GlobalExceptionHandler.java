@@ -3,6 +3,7 @@ package br.edu.ifpe.easy_football_management_backend.application.commom.exceptio
 import com.auth0.jwt.exceptions.*;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -81,7 +82,18 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
     }
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, Object>> handleDataException(RuntimeException ex) {
+        Map<String, Object> errorDetails = new HashMap<>();
+        errorDetails.put("status", HttpStatus.BAD_REQUEST.value());
+        errorDetails.put("error", "BAD REQUEST");
+        errorDetails.put("message", "violated of data integrity constraints.");
+        errorDetails.put("details", ex.getMessage());
 
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
+    //
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String, Object>> handleRuntimeException(RuntimeException ex) {
         Map<String, Object> errorDetails = new HashMap<>();

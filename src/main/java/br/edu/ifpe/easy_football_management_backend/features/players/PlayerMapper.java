@@ -50,5 +50,6 @@ public abstract class PlayerMapper {
     @Mapping(target = "position", source = "position")
     @Mapping(target = "number", source = "number")
     @Mapping(target = "team", source = "team")
+    @Mapping(target = "createdAt", expression = "java(java.time.LocalDateTime.now())")
     public abstract Player toEntity(PlayerDtoResponse playerDtoResponse);
 }

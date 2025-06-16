@@ -7,6 +7,7 @@ import br.edu.ifpe.easy_football_management_backend.features.championships.Champ
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Component
@@ -23,6 +24,7 @@ public class ChampionshipsCommandHandler {
     @Transactional
     public Championships handler(ChampionshipsDTO championshipsDTO) {
         var entity = mapper.toEntity(championshipsDTO);
+        entity.setStartDate(LocalDate.now());
         return repository.save(entity);
     }
 
