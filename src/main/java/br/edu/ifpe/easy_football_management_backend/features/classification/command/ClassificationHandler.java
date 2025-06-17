@@ -34,8 +34,8 @@ public class ClassificationHandler {
 
     @EventListener
     public void GenerateClassificationEvent(ChampionshipsEvent event) {
-        String keyLock = "ClassificationHandler.GenerateClassificationEvent.";
-        var lock = redissonClient.getLock(keyLock);
+//        String keyLock = "ClassificationHandler.GenerateClassificationEvent." + event.getEventId();
+//        var lock = redissonClient.getLock(keyLock);
         try {
             var championshipId = event.getChampionshipsId();
             Championships championship = championshipsRepository.findById(championshipId)
@@ -67,14 +67,14 @@ public class ClassificationHandler {
                     throw new BusinessException("Tipo de campeonato não suportado para geração de partidas.");
             }
 
-            if (!generatedMatches.isEmpty()) {
-                championship.setStatus(StatusChampionship.IN_PROGRESS);
-                championshipsRepository.save(championship);
-            }
-
+//            if (!generatedMatches.isEmpty()) {
+//                championship.setStatus(StatusChampionship.IN_PROGRESS);
+//                championshipsRepository.save(championship);
+//            }
+//            lock.unlock();
             matchRepository.saveAll(generatedMatches);
         } finally {
-            lock.unlock();
+            // ignore
         }
     }
 

@@ -24,9 +24,9 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Void> register(@Valid @RequestBody RegisterUserCommand command) {
-        registerUserCommandHandler.handle(command);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ResponseAuthDTO> register(@Valid @RequestBody RegisterUserCommand command) {
+
+        return ResponseEntity.ok(new ResponseAuthDTO(registerUserCommandHandler.handle(command)));
     }
 
     @PostMapping("/login")

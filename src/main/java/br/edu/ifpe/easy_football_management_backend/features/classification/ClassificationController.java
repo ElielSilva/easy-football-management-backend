@@ -7,10 +7,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,12 +24,12 @@ public class ClassificationController {
     }
 
     @GetMapping("/matchs/{Championships}")
-    public ResponseEntity<List<Matchs>> FindByIdMatchs(@RequestParam("Championships") @NotNull @Valid UUID tourmanetId) {
+    public ResponseEntity<List<Matchs>> FindByIdMatchs(@PathVariable("Championships") @NotNull @Valid UUID tourmanetId) {
         return ResponseEntity.ok(classificationQueryHandler.handlerMatches(tourmanetId));
     }
 
     @GetMapping("/{Championships}")
-    public ResponseEntity<List<Match>> FindByIdClassification(@RequestParam("Championships") @NotNull @Valid UUID championshipId) {
+    public ResponseEntity<List<Match>> FindByIdClassification(@PathVariable("Championships") @NotNull @Valid UUID championshipId) {
         return ResponseEntity.ok(classificationQueryHandler.handler(championshipId));
     }
 }

@@ -5,6 +5,7 @@ import br.edu.ifpe.easy_football_management_backend.domain.entity.TeamRepository
 import br.edu.ifpe.easy_football_management_backend.domain.entity.User;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.UserRepository;
 import br.edu.ifpe.easy_football_management_backend.features.auth.RegisterUserCommand;
+import br.edu.ifpe.easy_football_management_backend.infrestructure.security.TokenService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -14,14 +15,16 @@ public class RegisterUserCommandHandler {
     private final UserRepository userRepository;
     private final TeamRepository teamRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TokenService tokenService;
 
-    public RegisterUserCommandHandler(UserRepository userRepository, TeamRepository teamRepository, PasswordEncoder passwordEncoder) {
+    public RegisterUserCommandHandler(UserRepository userRepository, TeamRepository teamRepository, PasswordEncoder passwordEncoder, TokenService tokenService) {
         this.userRepository = userRepository;
         this.teamRepository = teamRepository;
         this.passwordEncoder = passwordEncoder;
+        this.tokenService = tokenService;
     }
 
-    public void handle(RegisterUserCommand command) {
+    public String handle(RegisterUserCommand command) {
         if (userRepository.findByEmail(command.email()).isPresent()) {
             throw new IllegalArgumentException("Email already exists.");
         }
@@ -44,5 +47,6 @@ public class RegisterUserCommandHandler {
                 .build();
         teamRepository.save(team);
 
+        return tokenService.generateToken(userCreated);
     }
 }

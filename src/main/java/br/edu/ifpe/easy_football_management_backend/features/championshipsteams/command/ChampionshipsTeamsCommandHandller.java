@@ -21,10 +21,10 @@ public class ChampionshipsTeamsCommandHandller {
     private final TeamRepository teamRepository;
     private final TokenService tokenService;
     private final ResultRepository resultRepository;
-
     private final RedissonClient redissonClient;
     private final ChampionshipsRepository championshipsRepository;
     private final ApplicationEventPublisher eventPublisher;
+
     @Autowired
     private ChampionshipsTeamsMapper mapper;
 
@@ -47,9 +47,9 @@ public class ChampionshipsTeamsCommandHandller {
 
     @Transactional
     public ChampionshipsTeams create(String authHeader, ChampionshipsTeamsDTO championshipsTeamsDTO) {
-        String keyLock = "ChampionshipsTeamsCommandHandller.create.";
-        var lock = redissonClient.getLock(keyLock);
-        lock.lock();
+//        String keyLock = "ChampionshipsTeamsCommandHandller.create." + championshipsTeamsDTO.teamId();
+//        var lock = redissonClient.getLock(keyLock);
+//        lock.lock();
         UUID userId = UUID.fromString(tokenService.extractID(authHeader));
         Optional<UUID> optionalTeamId = teamRepository.findFirstTeamIdByUserId(userId);
         Championships championships = championshipsRepository
@@ -70,9 +70,10 @@ public class ChampionshipsTeamsCommandHandller {
         countTeamInChampionship++;
         var result = championshipsTeamsRepository.save(entity);
         if (countTeamInChampionship.equals(championships.getQuantityTeams())) {
+//            lock.unlock();
             eventPublisher.publishEvent(new ChampionshipsEvent(championshipsTeamsDTO.championshipsId(), UUID.randomUUID()));
         }
-        lock.unlock();
+//        lock.unlock();
         return result;
     }
 
@@ -80,7 +81,7 @@ public class ChampionshipsTeamsCommandHandller {
         UUID ID = UUID.fromString(tokenService.extractID(authHeader));
         Optional<UUID> optionalTeamId = teamRepository.findFirstTeamIdByUserId(ID);
         UUID teamId = optionalTeamId.orElseThrow(() -> new NotFoundException("Team not found"));
-        String keyLock = "ChampionshipsTeamsCommandHandller.create.";
+        String keyLock = "ChampionshipsTeamsCommandHandller.create" + ChampionshipsId;
         var lock = redissonClient.getLock(keyLock);
         lock.lock();
         Integer countTeamInChampionship = championshipsTeamsRepository.countByTeamContains(ChampionshipsId);

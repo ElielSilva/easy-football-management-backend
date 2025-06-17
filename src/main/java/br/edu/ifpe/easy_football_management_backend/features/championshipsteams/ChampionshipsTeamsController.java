@@ -33,7 +33,7 @@ public class ChampionshipsTeamsController {
         return ResponseEntity.ok("sucesso");
     }
 
-    @GetMapping("championshipId={championshipId}&teamId={teamId}")
+    @GetMapping("isExists")
     public ResponseEntity<String> registerTeam(@RequestHeader("Authorization") String authHeader, @RequestParam UUID championshipId, @RequestParam UUID teamId) {
         championshipsTeamsQueryHandller.getOne(authHeader, championshipId, teamId);
         // Aqui você pode usar os IDs normalmente

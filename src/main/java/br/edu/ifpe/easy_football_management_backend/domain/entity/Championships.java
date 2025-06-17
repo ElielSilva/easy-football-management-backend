@@ -1,5 +1,6 @@
 package br.edu.ifpe.easy_football_management_backend.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Size;
@@ -53,14 +54,18 @@ public class Championships {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
+    @ToString.Exclude
     private User user;
 
     @OneToMany(mappedBy = "championship", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
+    @JsonBackReference
     private List<ChampionshipsTeams> registeredTeams; // Relacionamento com times inscritos
 
     @OneToMany(mappedBy = "championship", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
+    @JsonBackReference
     private List<Result> results; // Relacionamento com os resultados dos jogos
 }
 
