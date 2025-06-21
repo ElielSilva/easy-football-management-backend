@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 public class ClassificationQueryHandler {
@@ -21,28 +22,13 @@ public class ClassificationQueryHandler {
     public List<Matchs> handlerMatches(UUID id) {
         var results = resultRepository.findByChampionshipId(id);
 
-        long teamsCount = results.stream()
-                .flatMap(r -> List.of(r.getHomeTeam().getId(), r.getAwayTeam().getId()).stream())
-                .distinct()
-                .count();
-
-        int totalRounds = (int) (teamsCount - 1);
-
         List<Matchs> rounds = new ArrayList<>();
-        for (int i = 1; i <= totalRounds; i++) {
-            int roundNumber = i;
-            int gamesPerRound = (int) Math.ceil(results.size() / (double) totalRounds);
-            int startIndex = (i - 1) * gamesPerRound;
-            int endIndex = Math.min(startIndex + gamesPerRound, results.size());
+        var matchRounds = results.stream().collect(Collectors.groupingBy(Match::getRound));
 
-            if (startIndex < results.size()) {
-                List<Match> roundGames = new ArrayList<>(
-                        results.subList(startIndex, endIndex)
-                );
-
-                Matchs match = new Matchs(roundNumber, roundGames);
-                rounds.add(match);
-            }
+       for (Integer round : matchRounds.keySet()) {
+            List<Match> matches = matchRounds.get(round);
+            Matchs matchs = new Matchs(round, matches);
+            rounds.add(matchs);
         }
 
         return rounds;

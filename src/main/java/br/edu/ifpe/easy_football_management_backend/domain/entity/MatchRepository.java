@@ -7,4 +7,6 @@ import java.util.UUID;
 
 public interface MatchRepository extends JpaRepository<Match, UUID> {
     List<Match> findByChampionshipId(UUID championshipId);
+
+    List<Match> findByChampionshipIdAndStatus(UUID championshipId, MatchStatus status);
 }

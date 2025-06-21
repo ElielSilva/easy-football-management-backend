@@ -9,10 +9,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -84,17 +81,51 @@ public class ClassificationHandler {
     private List<Match> generateLeagueMatches(Championships championship, List<Team> teams) {
         List<Match> matches = new ArrayList<>();
         int numTeams = teams.size();
-        int currentRound = 1;
 
-        for (int i = 0; i < numTeams - 1; i++) {
-            for (int j = i + 1; j < numTeams; j++) {
-                Team homeTeam = teams.get(i);
-                Team awayTeam = teams.get(j);
-
-                matches.add(createMatch(championship, homeTeam, awayTeam, currentRound, LocalDateTime.now().plusDays(currentRound * 7L))); // Exemplo: 1 semana por rodada
-            }
-            currentRound++;
+        boolean hasBye = false;
+        if (numTeams % 2 != 0) {
+            numTeams++;
+            hasBye = true;
         }
+
+        List<Team> rotatedTeams = new ArrayList<>(teams);
+        if (hasBye) {
+            rotatedTeams.add(null);
+        }
+
+        int numRounds = numTeams - 1;
+
+        for (int round = 0; round < numRounds; round++) {
+            Team homeFixedTeam = rotatedTeams.get(0);
+
+            for (int i = 0; i < numTeams / 2; i++) {
+                Team team1 = rotatedTeams.get(i);
+                Team team2 = rotatedTeams.get(numTeams - 1 - i);
+
+                if (team1 == null || team2 == null) {
+                    System.out.println("Rodada " + (round + 1) + ": Time de folga (Bye) nesta rodada.");
+                } else {
+                    if (i == 0) {
+                        Team fixedTeam = rotatedTeams.get(0);
+                        Team rotatingOpponent = rotatedTeams.get(numTeams - 1);
+                        if (fixedTeam != null && rotatingOpponent != null) {
+                            matches.add(createMatch(championship, fixedTeam, rotatingOpponent, round + 1, LocalDateTime.now().plusDays(((long) (round + 1) * 7L))));
+                        }
+                    } else {
+                        Team teamA = rotatedTeams.get(i);
+                        Team teamB = rotatedTeams.get(numTeams - 1 - i);
+
+                        if (teamA != null && teamB != null) {
+                            matches.add(createMatch(championship, teamA, teamB, round + 1, LocalDateTime.now().plusDays(((long) (round + 1) * 7L))));
+                        }
+                    }
+                }
+            }
+
+            Team lastTeam = rotatedTeams.remove(numTeams - 1);
+            rotatedTeams.add(1, lastTeam);
+        }
+
         return matches;
     }
 
@@ -103,36 +134,9 @@ public class ClassificationHandler {
      * Requer que o número de times seja uma potência de 2.
      */
     private List<Match> generateCupMatches(Championships championship, List<Team> teams) {
-        List<Match> matches = new ArrayList<>();
-        int numTeams = teams.size();
+       // gere a arvore aqui..
 
-        if (numTeams == 0 || (numTeams & (numTeams - 1)) != 0) {
-            throw new BusinessException("Para campeonatos de copa, o número de times deve ser uma potência de 2 (ex: 2, 4, 8, 16...). Atualmente: " + numTeams);
-        }
-
-        Collections.shuffle(teams);
-
-        int round = 1;
-        List<Team> currentRoundTeams = new ArrayList<>(teams);
-
-        while (currentRoundTeams.size() > 1) {
-            if (currentRoundTeams.size() % 2 != 0) {
-                throw new BusinessException("Número ímpar de times na rodada de copa. Erro de lógica.");
-            }
-
-            List<Team> nextRoundTeams = new ArrayList<>();
-
-            for (int i = 0; i < currentRoundTeams.size(); i += 2) {
-                Team homeTeam = currentRoundTeams.get(i);
-                Team awayTeam = currentRoundTeams.get(i + 1);
-
-                matches.add(createMatch(championship, homeTeam, awayTeam, round, LocalDateTime.now().plusDays(round * 3L))); // Exemplo: 3 dias entre rodadas
-
-            }
-
-            break;
-        }
-        return matches;
+        return new ArrayList<>();
     }
 
     private Match createMatch(Championships championship, Team homeTeam, Team awayTeam, Integer round, LocalDateTime matchDateTime) {

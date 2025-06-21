@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -50,4 +51,17 @@ public class Match {
     @ToString.Exclude
     private List<Statistic> statistics;
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(homeTeam) + Objects.hash(awayTeam);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Match match = (Match) obj;
+        return (Objects.equals(homeTeam.getId(), match.homeTeam.getId()) &&
+                Objects.equals(awayTeam.getId(), match.awayTeam.getId()));
+    }
 }
