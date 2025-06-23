@@ -29,11 +29,10 @@ public class RegisterUserCommandHandler {
             throw new IllegalArgumentException("Email already exists.");
         }
 
-        List<Role> roles = new ArrayList<>();
-        roles.add(Role.USER);
+        Role roles = Role.USER;
 
         if (command.isAdmin()) {
-            roles.add(Role.ADMIN);
+            roles = Role.ADMIN;
         }
 
         User user = User.builder()

@@ -35,7 +35,7 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("api-local")
                     .withSubject(user.getId().toString())
-                    .withClaim("role", user.getRole().stream().map(Role::name).toList())
+                    .withClaim("role", user.getRole().toString())
                     .withClaim("name", user.getName())
                     .withClaim("email", user.getEmail())
                     .withClaim("id", user.getId().toString())

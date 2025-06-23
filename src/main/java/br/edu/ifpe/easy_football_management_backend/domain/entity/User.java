@@ -33,7 +33,8 @@ public class User {
     private String password;
 
     @Column(name = "role", nullable = false)
-    private List<Role> role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Column(name = "url_image")
     private String urlImage;
