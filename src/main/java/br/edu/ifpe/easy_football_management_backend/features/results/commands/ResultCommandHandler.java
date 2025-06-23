@@ -8,35 +8,34 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 public class ResultCommandHandler {
 
     private final MatchRepository matchRepository;
     private final StandingRepository standingRepository;
+    private final ChampionshipsRepository championshipsRepository;
     private final StatisticRepository statisticRepository;
     private final PlayerRepository playerRepository; // Injetado para buscar jogadores
 
     public ResultCommandHandler(MatchRepository matchRepository,
-                         StandingRepository standingRepository,
-                         StatisticRepository statisticRepository,
-                         PlayerRepository playerRepository) {
+                                StandingRepository standingRepository, ChampionshipsRepository championshipsRepository,
+                                StatisticRepository statisticRepository,
+                                PlayerRepository playerRepository) {
         this.matchRepository = matchRepository;
         this.standingRepository = standingRepository;
+        this.championshipsRepository = championshipsRepository;
         this.statisticRepository = statisticRepository;
         this.playerRepository = playerRepository;
     }
 
     @Transactional
     public Match recordMatchResult(ResultDTO resultDTO) {
-        // 1. Validação inicial do DTO (via Jakarta Validation nas anotações do DTO)
-        // Spring MVC/WebFlux fará a validação @Valid no controller.
-
-        // 2. Buscar a partida
         Match match = matchRepository.findById(resultDTO.resultId)
                 .orElseThrow(() -> new BusinessException("Partida não encontrada com ID: " + resultDTO.resultId));
 
-        // Valida se os IDs dos times no DTO correspondem aos da partida
+
         if (!match.getHomeTeam().getId().equals(resultDTO.idHomeTeam) ||
                 !match.getAwayTeam().getId().equals(resultDTO.idAwayTeam)) {
             throw new BusinessException("Os IDs dos times no resultado não correspondem aos da partida.");
@@ -49,22 +48,25 @@ public class ResultCommandHandler {
             throw new BusinessException("Não é possível registrar resultado para uma partida que não está agendada ou em andamento.");
         }
 
-        // 3. Atualizar os gols e o status da Match
         match.setHomeTeamGoals(resultDTO.homeTeamGoals);
         match.setAwayTeamGoals(resultDTO.awayTeamGoals);
-        match.setStatus(MatchStatus.COMPLETED); // Partida finalizada
+        match.setStatus(MatchStatus.COMPLETED);
 
-        Match updatedMatch = matchRepository.save(match); // Salva as alterações na partida
+        if (match.getChampionship().getType() == TypeChampionship.CUP ) {
+            recordMatchResult(resultDTO.resultId, resultDTO.homeTeamGoals, resultDTO.awayTeamGoals);
+            processPlayerStatistics(match, resultDTO.playersResults);
 
-        // 4. Atualizar a Standing (classificação)
+            return match;
+        }
+
+        Match updatedMatch = matchRepository.save(match);
+
         updateStandings(match);
 
-        // 5. Processar as Statistics dos jogadores
         if (resultDTO.playersResults != null && !resultDTO.playersResults.isEmpty()) {
             processPlayerStatistics(match, resultDTO.playersResults);
         }
 
-        System.out.println("Resultado registrado, classificações e estatísticas atualizadas para a partida: " + resultDTO.resultId);
         return updatedMatch;
     }
 
@@ -153,5 +155,46 @@ public class ResultCommandHandler {
             statisticRepository.save(statistic);
             System.out.println("Estatística salva para jogador " + player.getName() + " na partida " + match.getId());
         }
+    }
+
+    @Transactional
+    public Match recordMatchResult(UUID matchId, int homeGoals, int awayGoals) {
+        Match match = matchRepository.findById(matchId)
+                .orElseThrow(() -> new IllegalArgumentException("Partida não encontrada com o ID: " + matchId));
+
+        if (match.getStatus() == MatchStatus.COMPLETED) {
+            throw new IllegalArgumentException("A partida já foi concluída.");
+        }
+
+        match.setHomeTeamGoals(homeGoals);
+        match.setAwayTeamGoals(awayGoals);
+        match.setStatus(MatchStatus.COMPLETED);
+
+        Team winner = match.getWinner();
+
+        if (winner == null) {
+            throw new IllegalArgumentException("A partida deve ter um vencedor para avançar no mata-mata.");
+        }
+
+        if (match.getNextMatch() != null) {
+            Match nextMatch = match.getNextMatch();
+
+            List<Match> matchesFeedingNextMatch = matchRepository.findByNextMatch(nextMatch);
+
+            if (nextMatch.getHomeTeam() == null) {
+                nextMatch.setHomeTeam(winner);
+            } else if (nextMatch.getAwayTeam() == null) {
+                nextMatch.setAwayTeam(winner);
+            } else {
+                throw new IllegalStateException("A próxima partida já tem ambos os times definidos. Lógica de preenchimento incorreta.");
+            }
+            matchRepository.save(nextMatch);
+        } else {
+            Championships championship = match.getChampionship();
+            championship.setStatus(StatusChampionship.FINISHED);
+            championshipsRepository.save(championship);
+        }
+
+        return matchRepository.save(match);
     }
 }

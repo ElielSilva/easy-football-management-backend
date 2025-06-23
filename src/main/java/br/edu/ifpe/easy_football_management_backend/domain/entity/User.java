@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -31,13 +32,16 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "role", nullable = false)
+    private List<Role> role;
+
     @Column(name = "url_image")
     private String urlImage;
 
     @Column(name = "deleted")
     private Boolean deleted;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonBackReference
     @ToString.Exclude
     private Team team;

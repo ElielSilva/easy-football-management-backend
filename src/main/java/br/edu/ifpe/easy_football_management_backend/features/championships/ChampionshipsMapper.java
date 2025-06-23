@@ -27,7 +27,6 @@ public abstract class ChampionshipsMapper {
     @Mapping(target = "type", source = "typeChampionship")
     @Mapping(target = "status", source = "statusChampionship")
     @Mapping(target = "registeredTeams", ignore = true)
-    @Mapping(target = "results", ignore = true)
     @Mapping(target = "startDate", ignore = true)
     @Mapping(target = "endDate", ignore = true)
     @Mapping(target = "user", source = "userID", qualifiedByName = "mapUserIdToUser")

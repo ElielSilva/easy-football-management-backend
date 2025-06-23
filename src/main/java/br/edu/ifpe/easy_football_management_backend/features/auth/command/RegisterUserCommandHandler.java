@@ -1,13 +1,13 @@
 package br.edu.ifpe.easy_football_management_backend.features.auth.command;
 
-import br.edu.ifpe.easy_football_management_backend.domain.entity.Team;
-import br.edu.ifpe.easy_football_management_backend.domain.entity.TeamRepository;
-import br.edu.ifpe.easy_football_management_backend.domain.entity.User;
-import br.edu.ifpe.easy_football_management_backend.domain.entity.UserRepository;
+import br.edu.ifpe.easy_football_management_backend.domain.entity.*;
 import br.edu.ifpe.easy_football_management_backend.features.auth.RegisterUserCommand;
 import br.edu.ifpe.easy_football_management_backend.infrestructure.security.TokenService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class RegisterUserCommandHandler {
@@ -29,12 +29,20 @@ public class RegisterUserCommandHandler {
             throw new IllegalArgumentException("Email already exists.");
         }
 
+        List<Role> roles = new ArrayList<>();
+        roles.add(Role.USER);
+
+        if (command.isAdmin()) {
+            roles.add(Role.ADMIN);
+        }
+
         User user = User.builder()
                 .name(command.name())
                 .email(command.email())
                 .phone("")
                 .password(passwordEncoder.encode(command.password()))
                 .urlImage("")
+                .role(roles)
                 .deleted(false)
                 .build();
 

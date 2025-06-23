@@ -1,6 +1,7 @@
 package br.edu.ifpe.easy_football_management_backend.infrestructure.security;
 
 
+import br.edu.ifpe.easy_football_management_backend.domain.entity.Role;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -34,6 +35,7 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("api-local")
                     .withSubject(user.getId().toString())
+                    .withClaim("role", user.getRole().stream().map(Role::name).toList())
                     .withClaim("name", user.getName())
                     .withClaim("email", user.getEmail())
                     .withClaim("id", user.getId().toString())

@@ -24,5 +24,6 @@ public record RegisterUserCommand(
                 regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$%^&+=!]).*$",
                 message = "A senha deve conter pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial."
         )
-        String password) {
+        String password,
+        boolean isAdmin) {
 }

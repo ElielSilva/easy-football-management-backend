@@ -53,6 +53,7 @@ public class SecurityConfigurations {
                                 "/api-docs",
                                 "/webjars/**",
                                 "/error").permitAll()
+                        .requestMatchers("/api/v1/classification/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);

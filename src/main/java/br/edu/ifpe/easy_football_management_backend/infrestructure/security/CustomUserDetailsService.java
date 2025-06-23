@@ -1,5 +1,6 @@
 package br.edu.ifpe.easy_football_management_backend.infrestructure.security;
 
+import br.edu.ifpe.easy_football_management_backend.domain.entity.Role;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.User;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
         User user = this.repository.findById(UUID.fromString(name)).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                user.getRole().stream().map(Role::name).map(org.springframework.security.core.authority.SimpleGrantedAuthority::new).toList()
+        );
     }
 }

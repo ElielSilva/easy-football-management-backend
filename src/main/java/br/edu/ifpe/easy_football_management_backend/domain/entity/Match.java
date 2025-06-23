@@ -24,11 +24,11 @@ public class Match {
     @JoinColumn(name = "championship_id", nullable = false)
     private Championships championship;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "home_team_id", nullable = false)
+    @JoinColumn(name = "home_team_id")
     private Team homeTeam;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "away_team_id", nullable = false)
+    @JoinColumn(name = "away_team_id")
     private Team awayTeam;
 
     @Column(name = "home_team_goals")
@@ -51,9 +51,26 @@ public class Match {
     @ToString.Exclude
     private List<Statistic> statistics;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "next_match_id")
+    private Match nextMatch;
+
     @Override
     public int hashCode() {
         return Objects.hash(homeTeam) + Objects.hash(awayTeam);
+    }
+
+    public Team getWinner() {
+        if (status == MatchStatus.COMPLETED) {
+            if (homeTeamGoals != null && awayTeamGoals != null) {
+                if (homeTeamGoals > awayTeamGoals) {
+                    return homeTeam;
+                } else if (awayTeamGoals > homeTeamGoals) {
+                    return awayTeam;
+                }
+            }
+        }
+        return null;
     }
 
     @Override

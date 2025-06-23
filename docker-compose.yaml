@@ -72,7 +72,7 @@ services:
       sleep 15;
       mc alias set myminio http://minio:9000 minioadmin minioadmin123;
       mc mb -p myminio/meu-bucket;
-      mc policy set public myminio/meu-bucket;
+      mc anonymous set public myminio/meu-bucket; 
       "
     networks:
       - my-networks

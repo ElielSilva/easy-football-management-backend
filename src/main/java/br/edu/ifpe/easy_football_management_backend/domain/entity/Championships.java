@@ -1,6 +1,7 @@
 package br.edu.ifpe.easy_football_management_backend.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Size;
@@ -65,7 +66,7 @@ public class Championships {
 
     @OneToMany(mappedBy = "championship", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
-    @JsonBackReference
-    private List<Result> results; // Relacionamento com os resultados dos jogos
+    @JsonManagedReference
+    private List<Match> matchs;
 }
 

@@ -58,7 +58,7 @@ public class ClassificationHandler {
                     generatedMatches.addAll(generateLeagueMatches(championship, teams));
                     break;
                 case CUP:
-                    generatedMatches.addAll(generateCupMatches(championship, teams));
+                    generateCupMatches(championship, teams);
                     break;
                 default:
                     throw new BusinessException("Tipo de campeonato não suportado para geração de partidas.");
@@ -133,11 +133,66 @@ public class ClassificationHandler {
      * Gera partidas para o formato de Copa (mata-mata).
      * Requer que o número de times seja uma potência de 2.
      */
-    private List<Match> generateCupMatches(Championships championship, List<Team> teams) {
-       // gere a arvore aqui..
+    private void generateCupMatches(Championships championship, List<Team> teams) {
+        int numTeams = teams.size();
+        if (numTeams  % 2 != 0 || numTeams < 2) {
+            throw new IllegalArgumentException("Para um mata-mata, a quantidade de times deve ser uma potência de 2 (ex: 8, 16, 32...). Times registrados: " + numTeams);
+        }
 
-        return new ArrayList<>();
-    }
+        Collections.shuffle(teams);
+
+        if (championship.getMatchs() != null) {
+            matchRepository.deleteAll(championship.getMatchs());
+            championship.getMatchs().clear();
+        } else {
+            championship.setMatchs(new ArrayList<>());
+        }
+
+        List<Match> currentRoundMatches = new ArrayList<>();
+        int currentRound = 1;
+
+        for (int i = 0; i < numTeams; i += 2) {
+            Team homeTeam = teams.get(i);
+            Team awayTeam = teams.get(i + 1);
+
+            Match match = createMatch(championship, homeTeam, awayTeam, currentRound, championship.getStartDate().atTime(10, 0).plusDays(currentRound * 7));
+            currentRoundMatches.add(match);
+        }
+
+        List<Match> previousRoundMatches = new ArrayList<>(currentRoundMatches);
+
+        while (previousRoundMatches.size() > 1) {
+            currentRound++;
+            List<Match> nextRoundMatches = new ArrayList<>();
+
+            for (int i = 0; i < previousRoundMatches.size(); i += 2) {
+                Match nextMatch = Match.builder()
+                        .championship(championship)
+                        .status(MatchStatus.SCHEDULED)
+                        .matchDateTime(championship.getStartDate().atTime(10, 0).plusDays(currentRound * 7))
+                        .round(currentRound)
+                        .build();
+                nextRoundMatches.add(nextMatch);
+
+                Match match1 = previousRoundMatches.get(i);
+                Match match2 = previousRoundMatches.get(i + 1);
+
+                match1.setNextMatch(nextMatch);
+                match2.setNextMatch(nextMatch);
+            }
+
+            matchRepository.saveAll(nextRoundMatches);
+            matchRepository.saveAll(previousRoundMatches);
+
+            championship.getMatchs().addAll(nextRoundMatches);
+            previousRoundMatches = nextRoundMatches;
+        }
+
+        championship.setStatus(StatusChampionship.IN_PROGRESS);
+         championshipsRepository.save(championship);
+        }
+
+
 
     private Match createMatch(Championships championship, Team homeTeam, Team awayTeam, Integer round, LocalDateTime matchDateTime) {
         return Match.builder()
@@ -145,7 +200,7 @@ public class ClassificationHandler {
                 .homeTeam(homeTeam)
                 .awayTeam(awayTeam)
                 .round(round)
-                .status(MatchStatus.SCHEDULED) // Status inicial da partida
+                .status(MatchStatus.SCHEDULED)
                 .matchDateTime(matchDateTime)
                 .build();
     }
