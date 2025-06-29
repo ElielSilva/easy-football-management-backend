@@ -12,4 +12,6 @@ import java.util.UUID;
 public interface PlayerRepository extends JpaRepository<Player, UUID> {
     @Query("SELECT p FROM Player p WHERE p.team.id = :teamId")
     List<Player> getAllPlayersForTeamId(@Param("teamId") UUID teamId);
+
+    List<Player> findByTeamId(UUID teamId);
 }

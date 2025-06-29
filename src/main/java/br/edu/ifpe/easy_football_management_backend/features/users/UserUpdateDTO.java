@@ -1,4 +1,6 @@
 package br.edu.ifpe.easy_football_management_backend.features.users;
 
-public record UserUpdateDTO(String name, String email, String password, String phone, String urlImage) {
+import jakarta.validation.constraints.NotNull;
+
+public record UserUpdateDTO(@NotNull String name,  String email, String phone, String urlImage) {
 }

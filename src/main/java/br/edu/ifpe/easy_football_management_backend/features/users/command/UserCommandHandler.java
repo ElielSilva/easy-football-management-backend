@@ -22,8 +22,8 @@ public class UserCommandHandler {
     }
 
     public User updateUsers(String authHeader, UserUpdateDTO userUpdateDTO) {
-        String token = authHeader.substring(7);
-        UUID id = UUID.fromString(tokenService.extractID(token));
+        String token = tokenService.extractID(authHeader);
+        UUID id = UUID.fromString(token);
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         userRepository.save(getUserUpdate(user, userUpdateDTO));
