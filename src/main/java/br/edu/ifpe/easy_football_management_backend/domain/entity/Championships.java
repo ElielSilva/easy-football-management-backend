@@ -66,7 +66,7 @@ public class Championships {
 
     @OneToMany(mappedBy = "championship", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
-    @JsonManagedReference
+    @JsonBackReference
     private List<Match> matchs;
 }
 

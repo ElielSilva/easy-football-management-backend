@@ -38,8 +38,11 @@ public class ChampionshipsController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Optional<Championships>> get(@RequestParam UUID championshipId) {
+    @GetMapping("/{championshipId}")
+    public ResponseEntity<Optional<Championships>> get(@PathVariable  UUID championshipId) {
+        System.out.println("AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
+        System.out.println(championshipId);
+        System.out.println("#####################################################");
         var result = championshipsQueryHandler.handler(championshipId);
         return ResponseEntity.ok(result);
     }

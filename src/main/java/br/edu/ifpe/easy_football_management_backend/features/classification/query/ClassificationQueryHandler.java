@@ -3,6 +3,7 @@ package br.edu.ifpe.easy_football_management_backend.features.classification.que
 import br.edu.ifpe.easy_football_management_backend.domain.entity.Match;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.MatchRepository;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.Matchs;
+import br.edu.ifpe.easy_football_management_backend.domain.entity.TypeChampionship;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -22,6 +23,9 @@ public class ClassificationQueryHandler {
     public List<Matchs> handlerMatches(UUID id) {
         var results = resultRepository.findByChampionshipId(id);
 
+//        if(results.getFirst().getChampionship().getType() == TypeChampionship.CUP) {
+//
+//        }
         List<Matchs> rounds = new ArrayList<>();
         var matchRounds = results.stream().collect(Collectors.groupingBy(Match::getRound));
 
