@@ -132,11 +132,10 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<Map<String, String>> handleGenericBusinessException(Exception ex) {
+    public ResponseEntity<Map<String, String>> handleGenericBusinessException(BusinessException ex) {
         log.error("handleGenericBusinessException: ", ex);
         Map<String, String> error = new HashMap<>();
-        String message = ex.getMessage();
-        Arrays.stream(ex.getStackTrace()).limit(1).forEach(st -> error.put(st.getMethodName(), message));
+        error.put("error", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 

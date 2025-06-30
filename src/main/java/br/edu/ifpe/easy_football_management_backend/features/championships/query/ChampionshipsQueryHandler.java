@@ -2,6 +2,7 @@ package br.edu.ifpe.easy_football_management_backend.features.championships.quer
 
 import br.edu.ifpe.easy_football_management_backend.domain.entity.Championships;
 import br.edu.ifpe.easy_football_management_backend.domain.entity.ChampionshipsRepository;
+import br.edu.ifpe.easy_football_management_backend.domain.entity.StatusChampionship;
 import br.edu.ifpe.easy_football_management_backend.infrestructure.security.TokenService;
 import org.springframework.stereotype.Component;
 
@@ -36,5 +37,10 @@ public class ChampionshipsQueryHandler {
     public Optional<Championships> handler(UUID id) {
         // trazer getChamPionsChiupID ->>
         return repository.findById(id);
+    }
+
+
+    public List<Championships> filterByNameAndStatus(String name, StatusChampionship status) {
+        return repository.findByNameLikeAndOptionalStatus(name, status);
     }
 }

@@ -20,4 +20,10 @@ public interface ChampionshipsRepository extends JpaRepository<Championships, UU
     List<Championships> findChampionshipsByTeam(@Param("team") Team team);
 
     List<Championships> findAllByUserId(UUID uuid);
+
+    @Query("SELECT u FROM Championships u " +
+            "WHERE 1 = 1" +
+            "AND (:name is null OR UPPER(u.name) LIKE UPPER(CONCAT('%', :name, '%')) )" +
+            "AND (:status IS NULL OR u.status = :status)")
+    List<Championships> findByNameLikeAndOptionalStatus(@Param("name") String name, @Param("status") StatusChampionship status);
 }

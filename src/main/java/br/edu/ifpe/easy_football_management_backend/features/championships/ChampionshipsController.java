@@ -1,6 +1,7 @@
 package br.edu.ifpe.easy_football_management_backend.features.championships;
 
 import br.edu.ifpe.easy_football_management_backend.domain.entity.Championships;
+import br.edu.ifpe.easy_football_management_backend.domain.entity.StatusChampionship;
 import br.edu.ifpe.easy_football_management_backend.features.championships.command.ChampionshipsCommandHandler;
 import br.edu.ifpe.easy_football_management_backend.features.championships.query.ChampionshipsQueryHandler;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -33,27 +34,32 @@ public class ChampionshipsController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Championships>> get(@RequestHeader ("Authorization") String authorization) {
+    public ResponseEntity<List<Championships>> get(@RequestHeader("Authorization") String authorization) {
         var result = championshipsQueryHandler.handler(authorization);
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/{championshipId}")
-    public ResponseEntity<Optional<Championships>> get(@PathVariable  UUID championshipId) {
-        System.out.println("AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
-        System.out.println(championshipId);
-        System.out.println("#####################################################");
+    @GetMapping("/filter")
+    public ResponseEntity<List<Championships>> filter(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) StatusChampionship status) {
+        var result = championshipsQueryHandler.filterByNameAndStatus(name, status);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<Championships>> getById(@PathVariable("id") UUID championshipId) {
         var result = championshipsQueryHandler.handler(championshipId);
         return ResponseEntity.ok(result);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Championships> update(@RequestParam UUID championshipId, @RequestBody @Valid ChampionshipsDTO championshipsDTO) {
+    public ResponseEntity<Championships> update(@PathVariable("id")UUID championshipId, @RequestBody @Valid ChampionshipsDTO championshipsDTO) {
         return ResponseEntity.ok(championshipsCommandHandler.handler(championshipsDTO, championshipId));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@RequestParam UUID championshipId) {
+    public ResponseEntity<String> delete(@PathVariable("id") UUID championshipId) {
         championshipsCommandHandler.handler(championshipId);
         return ResponseEntity.ok("sucesso");
     }

@@ -1,9 +1,6 @@
 package br.edu.ifpe.easy_football_management_backend.features.classification.query;
 
-import br.edu.ifpe.easy_football_management_backend.domain.entity.Match;
-import br.edu.ifpe.easy_football_management_backend.domain.entity.MatchRepository;
-import br.edu.ifpe.easy_football_management_backend.domain.entity.Matchs;
-import br.edu.ifpe.easy_football_management_backend.domain.entity.TypeChampionship;
+import br.edu.ifpe.easy_football_management_backend.domain.entity.*;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,10 +12,13 @@ import java.util.stream.Collectors;
 public class ClassificationQueryHandler {
 
     private final MatchRepository resultRepository;
+    private final StandingRepository standingRepository;
 
-    public ClassificationQueryHandler(MatchRepository resultRepository) {
+    public ClassificationQueryHandler(MatchRepository resultRepository, StandingRepository standingRepository) {
         this.resultRepository = resultRepository;
+        this.standingRepository = standingRepository;
     }
+
 
     public List<Matchs> handlerMatches(UUID id) {
         var results = resultRepository.findByChampionshipId(id);
@@ -38,8 +38,8 @@ public class ClassificationQueryHandler {
         return rounds;
     }
 
-    public List<Match> handler(UUID id) {
-        var results = resultRepository.findByChampionshipId(id);
+    public List<Standing> handler(UUID id) {
+        var results = standingRepository.findByChampionshipIdOrderByPointsDescGoalsForDesc(id);
 
         return results;
     }

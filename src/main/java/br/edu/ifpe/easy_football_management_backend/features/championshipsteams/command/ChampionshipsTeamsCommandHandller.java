@@ -59,7 +59,7 @@ public class ChampionshipsTeamsCommandHandller {
             throw new BusinessException("Team does not belong to the user");
         }
         Integer countTeamInChampionship = championshipsTeamsRepository.countByTeamContains(championshipsTeamsDTO.championshipsId());
-        if (championshipsTeamsRepository.existsTeam(championshipsTeamsDTO.championshipsId(),championshipsTeamsDTO.teamId())) {
+        if (championshipsTeamsRepository.existsTeam(championshipsTeamsDTO.teamId(), championshipsTeamsDTO.championshipsId())) {
             throw new BusinessException("Team already exists");
         }
         if (countTeamInChampionship >= championships.getQuantityTeams()) {

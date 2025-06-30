@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public interface ChampionshipsTeamsRepository extends JpaRepository<Championship
     void deleteByTeamIdAndChampionshipsId(UUID teamId, UUID ChampionshipsId);
 
     @Query("SELECT CASE WHEN COUNT(ct) > 0 THEN true ELSE false END FROM ChampionshipsTeams ct WHERE ct.team.id = :teamId AND ct.championship.id = :ChampionshipsId")
-    boolean existsTeam(UUID teamId, UUID ChampionshipsId);
+    boolean existsTeam(@Param("teamId") UUID teamId, @Param("ChampionshipsId") UUID ChampionshipsId);
 
     Optional<ChampionshipsTeams> findByChampionship_IdAndTeam_Id(UUID championshipsId, UUID teamId);
 
